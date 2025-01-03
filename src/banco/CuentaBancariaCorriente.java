@@ -40,6 +40,7 @@ public class CuentaBancariaCorriente extends CuentaBancaria{
 
         if (puedeRetirarse(monto)) {
             procesarRetiro(monto);
+            historialRetiros.add(String.format("Monto retirado: $%.2f, Saldo actual: $%.2f, Limite de sobregiro restante: $%.2f", monto, obtenerSaldo(), limiteSobregiro));
             LOGGER.info("Retiro exitoso. Nuevo saldo: " + obtenerSaldo() + ", Limite de sobregiro restante: " + limiteSobregiro);
         } else {
             LOGGER.info("Fondos insuficientes o monto inválido, incluso con sobregiro.");
