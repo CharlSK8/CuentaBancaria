@@ -1,4 +1,6 @@
 package banco;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class CuentaBancaria {
@@ -11,6 +13,30 @@ public class CuentaBancaria {
     public CuentaBancaria(String numeroCuenta, double saldoInicial) {
         this.numeroCuenta = numeroCuenta;
         this.saldo = saldoInicial;
+
+    private CuentaBancaria(Builder builder) {
+        this.numeroCuenta = builder.numeroCuenta;
+        this.saldo = builder.saldo;
+        this.historialRetiros = new ArrayList<>();
+    }
+
+
+    public static class Builder {
+        private final String numeroCuenta;
+        private double saldo;
+
+        public Builder(String numeroCuenta) {
+            this.numeroCuenta = numeroCuenta;
+        }
+
+        public Builder saldoInicial(double saldoInicial) {
+            this.saldo = saldoInicial;
+            return this;
+        }
+
+        public CuentaBancaria build() {
+            return new CuentaBancaria(this);
+        }
     }
 
     public void depositar(double monto) {
