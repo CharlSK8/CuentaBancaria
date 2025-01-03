@@ -8,11 +8,13 @@ public class CuentaBancaria {
     private final String numeroCuenta;
     private double saldo;
     protected static final Logger LOGGER = Logger.getLogger(CuentaBancaria.class.getName());
+    public List<String> historialRetiros;
 
-
-    public CuentaBancaria(String numeroCuenta, double saldoInicial) {
+    public CuentaBancaria(String numeroCuenta, double saldo) {
         this.numeroCuenta = numeroCuenta;
-        this.saldo = saldoInicial;
+        this.saldo = saldo;
+        this.historialRetiros = new ArrayList<>();
+    }
 
     private CuentaBancaria(Builder builder) {
         this.numeroCuenta = builder.numeroCuenta;
@@ -55,7 +57,15 @@ public class CuentaBancaria {
             LOGGER.info("No se permiten retirar valores negativos");
         } else {
             saldo -= monto;
+            historialRetiros.add(String.format("Monto retirado: $%.2f, Saldo actual: $%.2f", monto, saldo));
             LOGGER.info(String.format("Se ha retirado satisfactoriamente de su cuenta $%.2f, su saldo actual es de $%.2f", monto, saldo));
+        }
+    }
+
+    public void mostrarHistorialRetiros() {
+        LOGGER.info("Historial de Retiros:");
+        for (String retiro : historialRetiros) {
+            LOGGER.info(retiro);
         }
     }
 
