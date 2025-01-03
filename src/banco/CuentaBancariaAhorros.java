@@ -3,9 +3,33 @@ package banco;
 public class CuentaBancariaAhorros extends CuentaBancaria{
     private double tasaInteres;
 
-    public CuentaBancariaAhorros(String numeroCuenta, double saldoInicial, double tasaInteres) {
-        super(numeroCuenta, saldoInicial);
-        this.tasaInteres = tasaInteres;
+    private CuentaBancariaAhorros(Builder builder) {
+        super(builder.numeroCuenta, builder.saldoInicial);
+        this.tasaInteres = builder.tasaInteres;
+    }
+
+    public static class Builder {
+        private final String numeroCuenta;
+        private double saldoInicial;
+        private double tasaInteres;
+
+        public Builder(String numeroCuenta) {
+            this.numeroCuenta = numeroCuenta;
+        }
+
+        public Builder saldoInicial(double saldoInicial) {
+            this.saldoInicial = saldoInicial;
+            return this;
+        }
+
+        public Builder tasaInteres(double tasaInteres) {
+            this.tasaInteres = tasaInteres;
+            return this;
+        }
+
+        public CuentaBancariaAhorros build() {
+            return new CuentaBancariaAhorros(this);
+        }
     }
 
     public void aplicarInteres() {
