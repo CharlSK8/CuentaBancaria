@@ -2,9 +2,33 @@ package banco;
 public class CuentaBancariaCorriente extends CuentaBancaria{
     private double limiteSobregiro;
 
-    public CuentaBancariaCorriente(String numeroCuenta, double saldoInicial, double limiteSobregiro) {
-        super(numeroCuenta, saldoInicial);
-        this.limiteSobregiro = limiteSobregiro;
+    private CuentaBancariaCorriente(Builder builder) {
+        super(builder.numeroCuenta, builder.saldoInicial);
+        this.limiteSobregiro = builder.limiteSobregiro;
+    }
+
+    public static class Builder {
+        private final String numeroCuenta;
+        private double saldoInicial;
+        private double limiteSobregiro;
+
+        public Builder(String numeroCuenta) {
+            this.numeroCuenta = numeroCuenta;
+        }
+
+        public Builder saldoInicial(double saldoInicial) {
+            this.saldoInicial = saldoInicial;
+            return this;
+        }
+
+        public Builder limiteSobregiro(double limiteSobregiro) {
+            this.limiteSobregiro = limiteSobregiro;
+            return this;
+        }
+
+        public CuentaBancariaCorriente build() {
+            return new CuentaBancariaCorriente(this);
+        }
     }
 
     @Override
