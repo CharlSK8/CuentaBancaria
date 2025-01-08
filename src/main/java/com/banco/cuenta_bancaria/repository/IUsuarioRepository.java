@@ -9,5 +9,8 @@ import com.banco.cuenta_bancaria.entity.Usuario;
 
 @Repository
 public interface IUsuarioRepository extends JpaRepository<Usuario, Long> {
+
     Optional<Usuario> findByNumeroIdetificacionAndActivoTrue(String numeroIdetificacion);
+    Optional<Usuario> findByIdAndActivoTrue(Long id);
+
 }
