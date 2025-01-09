@@ -57,4 +57,14 @@ public class CuentaBancariaServiceImpl implements ICuentaBancariaService {
         cuentaBancariaRepository.save(nuevaCuentaBancaria);
         return Result.success("Cuenta bancaria creada correctamente");
     }
+
+    @Override
+    public Result<SaldoActualResponseDTO, String> mostrarSaldoActual(int numeroCuenta) {
+        Optional<CuentaBancaria> cuentaBancaria = cuentaBancariaRepository.findByNumeroCuenta(numeroCuenta);
+        if(!cuentaBancaria.isPresent()) {
+            return Result.failure(List.of("Cuenta bancaria no encontrada"), HttpStatus.BAD_REQUEST);
+        }
+        
+        return Result.success(SaldoActualResponseDTO.builder().saldo(cuentaBancaria.get().getSaldo()).build());
+    }
 }

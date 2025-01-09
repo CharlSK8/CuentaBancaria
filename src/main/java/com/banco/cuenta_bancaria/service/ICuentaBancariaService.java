@@ -7,5 +7,7 @@ import com.banco.cuenta_bancaria.dto.response.SaldoActualResponseDTO;
 import com.banco.cuenta_bancaria.util.Result;
 
 public interface ICuentaBancariaService {
+
+    Result<SaldoActualResponseDTO, String> mostrarSaldoActual(int numeroCuenta);
     Result<String, String> crearCuentaBancaria(CrearCuentaRequestDTO request);
 }
