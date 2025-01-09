@@ -8,4 +8,7 @@ import com.banco.cuenta_bancaria.entity.Usuario;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface IUsuarioMapper {
+
+    Usuario toUsuario(RegistrarUsuarioRequestDTO registrarUsuarioRequestDTO);
+
 }
