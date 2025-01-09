@@ -36,4 +36,27 @@ public class UsuarioServiceImpl implements IUsuarioService{
         usuarioRepository.save(nuevoUsuario);
         return Result.success("Usuario registrado correctamente");
     }
+
+
+    @Override
+    public Result<String, String> actualizarUsuario(Long id, ActualizarUsuarioRequestDTO request) {
+        Optional<Usuario> usuario = usuarioRepository.findByIdAndActivoTrue(id);
+        if(!usuario.isPresent()) {
+            return Result.failure(List.of("Usuario no encontrado"), HttpStatus.BAD_REQUEST);
+        }
+        if(request.getNombre() != null) {
+            usuario.get().setNombre(request.getNombre());
+        }
+        if(request.getApellido() != null) {
+            usuario.get().setApellido(request.getApellido());
+        }
+        if(request.getCorreo() != null) {
+            usuario.get().setCorreo(request.getCorreo());
+        }
+        if(request.getTelefono() != null) {
+            usuario.get().setTelefono(request.getTelefono());
+        }
+        usuarioRepository.save(usuario.get());
+        return Result.success("Usuario actualizado correctamente");
+    }
 }

@@ -7,4 +7,5 @@ import com.banco.cuenta_bancaria.util.Result;
 public interface IUsuarioService {
 
     Result<String, String> registrarUsuario(RegistrarUsuarioRequestDTO request);
+    Result<String, String> actualizarUsuario(Long id, ActualizarUsuarioRequestDTO request);
 }
