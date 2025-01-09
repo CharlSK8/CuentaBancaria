@@ -11,4 +11,5 @@ public interface ICuentaBancariaService {
     Result<SaldoActualResponseDTO, String> mostrarSaldoActual(int numeroCuenta);
     Result<String, String> crearCuentaBancaria(CrearCuentaRequestDTO request);
     Result<String, String> retiroCuenta(RetiroCuentaRequestDTO request);
+    Result<String, String> depositoCuenta(DepositoCuentaRequestDTO request);
 }
