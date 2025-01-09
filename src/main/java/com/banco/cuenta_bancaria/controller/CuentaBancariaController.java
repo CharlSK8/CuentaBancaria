@@ -54,4 +54,17 @@ public class CuentaBancariaController {
                                 .message(String.join("\n", result.getErrors()))
                                 .code(result.getStatusCode().value()).response(null).build());
         }
+
+    @PostMapping("/retiro-cuenta")
+    public ResponseEntity<ResponseDTO<String>> retiroCuenta(@RequestBody RetiroCuentaRequestDTO retiroCuentaRequestDTO) {
+        Result<String, String> result = cuentaBancariaService.retiroCuenta(retiroCuentaRequestDTO);
+        return result.isSuccess()
+                ? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.<String>builder()
+                        .message(result.getValue())
+                        .code(HttpStatus.OK.value()).response(null).build())
+                : ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ResponseDTO.<String>builder()
+                                .message(String.join("\n", result.getErrors()))
+                                .code(result.getStatusCode().value()).response(null).build());
+    }
 }
