@@ -59,4 +59,17 @@ public class UsuarioServiceImpl implements IUsuarioService{
         usuarioRepository.save(usuario.get());
         return Result.success("Usuario actualizado correctamente");
     }
+
+
+    @Override
+    public Result<String, String> inactivarUsuario(Long id) {
+        Optional<Usuario> usuario = usuarioRepository.findByIdAndActivoTrue(id);
+        if(!usuario.isPresent()) {
+            return Result.failure(List.of("Usuario no encontrado"), HttpStatus.BAD_REQUEST);
+        }
+        usuario.get().setActivo(false);
+        usuarioRepository.save(usuario.get());
+        return Result.success("Usuario inactivado correctamente");
+    }
+
 }

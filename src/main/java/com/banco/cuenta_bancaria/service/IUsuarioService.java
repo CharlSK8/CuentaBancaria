@@ -8,4 +8,5 @@ public interface IUsuarioService {
 
     Result<String, String> registrarUsuario(RegistrarUsuarioRequestDTO request);
     Result<String, String> actualizarUsuario(Long id, ActualizarUsuarioRequestDTO request);
+    Result<String, String> inactivarUsuario(Long id);
 }
