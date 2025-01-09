@@ -10,4 +10,8 @@ import com.banco.cuenta_bancaria.entity.Token;
 
 @Repository
 public interface ITokenRepository extends JpaRepository<Token, Long> {
+
+    List<Token> findAllValidIsFalseOrRevokedIsFalseByUsuarioId(Long userId);
+    Optional<Token> findByToken(String jwtToken);
+
 }
