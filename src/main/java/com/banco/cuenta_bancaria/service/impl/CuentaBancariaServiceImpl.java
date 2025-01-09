@@ -67,4 +67,27 @@ public class CuentaBancariaServiceImpl implements ICuentaBancariaService {
         
         return Result.success(SaldoActualResponseDTO.builder().saldo(cuentaBancaria.get().getSaldo()).build());
     }
+
+	@Override
+	public Result<String, String> retiroCuenta(RetiroCuentaRequestDTO request) {
+		Optional<CuentaBancaria> cuentaBancaria = cuentaBancariaRepository.findByNumeroCuenta(request.getNumeroCuenta());
+		if(!cuentaBancaria.isPresent()) {
+			return Result.failure(List.of("Cuenta bancaria no encontrada"), HttpStatus.BAD_REQUEST);
+		}
+
+        if(request.getMonto().compareTo(cuentaBancaria.get().getSaldo()) > 0) {
+            return Result.failure(List.of("Saldo insuficiente"), HttpStatus.BAD_REQUEST);
+        }
+        Movimiento movimiento = Movimiento.builder()
+                .tipoMovimiento(TipoMovimiento.RETIRO.toString())
+                .monto(request.getMonto())
+                .cuentaBancaria(cuentaBancaria.get())
+                .fechaMovimiento(LocalDateTime.now())
+                .build();
+
+        cuentaBancaria.get().setSaldo(cuentaBancaria.get().getSaldo().subtract(request.getMonto()));
+        cuentaBancariaRepository.save(cuentaBancaria.get());
+        movimientoRepository.save(movimiento);
+        return Result.success("Retiro de cuenta realizado correctamente");
+	}
 }
