@@ -9,4 +9,7 @@ import com.banco.cuenta_bancaria.entity.CuentaBancaria;
 
 @Repository
 public interface ICuentaBancariaRepository extends JpaRepository<CuentaBancaria, Long>{
+
+    Optional<CuentaBancaria> findByNumeroCuenta(int numeroCuenta);
+
 }
