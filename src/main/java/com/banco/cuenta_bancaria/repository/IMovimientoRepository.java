@@ -12,4 +12,9 @@ import com.banco.cuenta_bancaria.entity.Movimiento;
 
 @Repository
 public interface IMovimientoRepository extends JpaRepository<Movimiento, Long> {
+
+    @Query("SELECT m FROM Movimiento m JOIN m.cuentaBancaria c WHERE c.numeroCuenta = :numeroCuenta")
+    Optional<List<Movimiento>> findByNumeroCuenta(@Param("numeroCuenta") int numeroCuenta);
+
+
 }
