@@ -42,4 +42,16 @@ public class CuentaBancariaController {
                                 .message(String.join("\n", result.getErrors()))
                                 .code(result.getStatusCode().value()).response(null).build());
     }
+    @GetMapping("/mostrar-saldo-actual/{numeroCuenta}")
+    public ResponseEntity<ResponseDTO> mostrarSaldo(@PathVariable("numeroCuenta") int numeroCuenta) {
+        Result<SaldoActualResponseDTO, String> result = cuentaBancariaService.mostrarSaldoActual(numeroCuenta);
+        return result.isSuccess()
+                ? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.<SaldoActualResponseDTO>builder()
+                        .message("Se ha mostrado el saldo correctamente")
+                        .code(HttpStatus.OK.value()).response(result.getValue()).build())
+                : ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ResponseDTO.<String>builder()
+                                .message(String.join("\n", result.getErrors()))
+                                .code(result.getStatusCode().value()).response(null).build());
+        }
 }
