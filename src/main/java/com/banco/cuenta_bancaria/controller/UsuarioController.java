@@ -37,4 +37,16 @@ public class UsuarioController {
 							.message(String.join("\n", result.getErrors()))
 							.code(result.getStatusCode().value()).response(null).build());
     }
+    @PostMapping("/actualizar/{id}")
+    public ResponseEntity<ResponseDTO<String>> actualizarUsuario(@PathVariable("id") Long id, @RequestBody ActualizarUsuarioRequestDTO request) {
+        Result<String, String> result = usuarioService.actualizarUsuario(id, request);
+        return result.isSuccess()
+					? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.<String>builder()
+							.message(result.getValue())
+							.code(HttpStatus.OK.value()).response(null).build())
+					: ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(ResponseDTO.<String>builder()
+							.message(String.join("\n", result.getErrors()))
+							.code(result.getStatusCode().value()).response(null).build());
+    }
 }
