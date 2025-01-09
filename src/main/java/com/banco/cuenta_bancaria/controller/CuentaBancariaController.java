@@ -42,6 +42,8 @@ public class CuentaBancariaController {
                                 .message(String.join("\n", result.getErrors()))
                                 .code(result.getStatusCode().value()).response(null).build());
     }
+
+
     @GetMapping("/mostrar-saldo-actual/{numeroCuenta}")
     public ResponseEntity<ResponseDTO> mostrarSaldo(@PathVariable("numeroCuenta") int numeroCuenta) {
         Result<SaldoActualResponseDTO, String> result = cuentaBancariaService.mostrarSaldoActual(numeroCuenta);
@@ -58,6 +60,19 @@ public class CuentaBancariaController {
     @PostMapping("/retiro-cuenta")
     public ResponseEntity<ResponseDTO<String>> retiroCuenta(@RequestBody RetiroCuentaRequestDTO retiroCuentaRequestDTO) {
         Result<String, String> result = cuentaBancariaService.retiroCuenta(retiroCuentaRequestDTO);
+        return result.isSuccess()
+                ? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.<String>builder()
+                        .message(result.getValue())
+                        .code(HttpStatus.OK.value()).response(null).build())
+                : ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ResponseDTO.<String>builder()
+                                .message(String.join("\n", result.getErrors()))
+                                .code(result.getStatusCode().value()).response(null).build());
+    }
+
+    @PostMapping("/deposito-cuenta")
+    public ResponseEntity<ResponseDTO<String>> depositoCuenta(@RequestBody DepositoCuentaRequestDTO depositoCuentaRequestDTO) {
+        Result<String, String> result = cuentaBancariaService.depositoCuenta(depositoCuentaRequestDTO);
         return result.isSuccess()
                 ? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.<String>builder()
                         .message(result.getValue())
