@@ -23,5 +23,12 @@ public class RegistrarUsuarioRequestDTO {
     @Email(message = "El correo debe ser válido")
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.(com)$", message = "El correo debe ser válido y terminar en .com")
     private String correo;
+    @Schema(description = "Contraseña de ingreso al aplicativo", example = "*******", requiredMode = Schema.RequiredMode.REQUIRED)
+    @NotBlank(message = "El campo 'contrasena' es obligatorio")
+    @Pattern(
+            regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+            message = "La contraseña debe tener al menos 8 caracteres, incluir letras, números y un carácter especial"
+    )
+    private String contrasena;
 
 }
