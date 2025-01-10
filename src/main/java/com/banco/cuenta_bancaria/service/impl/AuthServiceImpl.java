@@ -75,4 +75,63 @@ public class AuthServiceImpl implements IAuthService {
         saveUserToken(usuario, jwtToken);
         return Result.success(new TokenResponse(jwtToken, refreshToken));
     }
+
+    @Override
+    public Result<TokenResponse, String> refreshToken(String authHeader) {
+        if(authHeader == null || !authHeader.startsWith("Bearer ")){
+            return createErrorResult("Invalid authorization header format", HttpStatus.BAD_REQUEST);
+        }
+
+        final String refreshToken = authHeader.substring(7);
+        final String userEmail = jwtService.extractUsername(refreshToken);
+
+        if (userEmail == null) {
+            return createErrorResult("Invalid refresh token", HttpStatus.UNAUTHORIZED);
+        }
+
+        final Optional<Usuario> userOptional = userRepository.findByCorreoAndActivoTrue(userEmail);
+
+        if(userOptional.isEmpty()){
+            return createErrorResult("User not found", HttpStatus.NOT_FOUND);
+        }
+        Usuario usuario = userOptional.get();
+
+        if(!jwtService.isTokenValid(refreshToken, usuario)){
+            return createErrorResult("Invalid or expired refresh token", HttpStatus.UNAUTHORIZED);
+        }
+
+        final Optional<Token> optionalToken = tokenRepository.findByToken(refreshToken);
+        if(optionalToken.isEmpty()){
+            return createErrorResult("Token not found", HttpStatus.BAD_REQUEST);
+        }
+
+        Token token = optionalToken.get();
+        if (token.isExpired() || token.isRevoked()) {
+            return createErrorResult("The token has expired or has been revoked.", HttpStatus.UNAUTHORIZED);
+        }
+
+        final String accessToken = jwtService.generateToken(usuario);
+        revokeAllUserTokens(usuario);
+        saveUserToken(usuario, accessToken);
+        return Result.success(new TokenResponse(accessToken, refreshToken));
+
+    }
+
+    @Override
+    public Result<String, String> logout(String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return Result.failure(List.of("Invalid authorization header format"), HttpStatus.BAD_REQUEST);
+        }
+        final String jwtToken = authHeader.substring(7);
+        final Optional<Token> optionalToken = tokenRepository.findByToken(jwtToken);
+        if(optionalToken.isEmpty()){
+            return Result.failure(Collections.singletonList("Token not found"), HttpStatus.BAD_REQUEST);
+        }
+        Token token = optionalToken.get();
+        token.setRevoked(true);
+        token.setExpired(true);
+        tokenRepository.save(token);
+        SecurityContextHolder.clearContext();
+        return Result.success("Logout successful");
+    }
 }
