@@ -91,4 +91,33 @@ public class AuthController {
                    .build());
        }
     }
+
+    /**
+     * Refresca el token de acceso utilizando un token de refresco.
+     *
+     * Este método permite a un usuario obtener un nuevo token de acceso mediante
+     * la provisión de un token de refresco que se pasa a través del encabezado
+     * de autorización {@link HttpHeaders#AUTHORIZATION}. Si el token de refresco
+     * es válido, se genera y devuelve un nuevo token de acceso.
+     *
+     * @param authHeader el encabezado de autorización que contiene el token de refresco.
+     *                   El token debe estar presente en el formato "Bearer {token}".
+     * @return una instancia de {@link ResponseEntity<ResponseDTO>} que contiene
+     *         la respuesta con el nuevo token de acceso generado.
+     * @throws Exception si ocurre algún error durante el proceso de refresco del token.
+     */
+    @Operation(summary = "Refrescar token de acceso", description = "Permite refrescar un token de acceso utilizando un token de refresco.")
+    @PostMapping("/refresh")
+    public ResponseEntity<ResponseDTO> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+        try {
+            final Result<TokenResponse, String> result = service.refreshToken(authHeader);
+            return getResponseDTOResponseEntity(result);
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDTO.builder()
+                    .message(Constants.MESSAGE_ERROR)
+                    .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                    .response(e.getMessage())
+                    .build());
+        }
+    }
     }
