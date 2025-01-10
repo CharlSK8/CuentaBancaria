@@ -120,4 +120,42 @@ public class AuthController {
                     .build());
         }
     }
+
+    /**
+     * Cierra la sesión del usuario invalidando el token actual.
+     *
+     * Este método permite cerrar la sesión de un usuario proporcionando
+     * el token de acceso a través del encabezado de autorización {@link HttpHeaders#AUTHORIZATION}.
+     * Al invalidar el token de acceso, se revoca el acceso del usuario a futuras
+     * llamadas a la API, asegurando que el token no pueda ser reutilizado.
+     *
+     * @param authHeader el encabezado de autorización que contiene el token de acceso
+     *                   del usuario a invalidar. El token debe estar presente en el
+     *                   formato "Bearer {token}".
+     * @return una instancia de {@link ResponseEntity<ResponseDTO>} que contiene
+     *         la respuesta con el estado de la operación (éxito o error).
+     * @throws Exception si ocurre algún error durante el proceso de cierre de sesión.
+     */
+    @Operation(summary = "Cerrar sesión del usuario",
+            description = "Cierra la sesión del usuario invalidando el token actual, revocando el acceso a futuras llamadas a la API.")
+    @PostMapping("/logout")
+    public ResponseEntity<ResponseDTO> logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+        try {
+            final Result<String, String> result = service.logout(authHeader);
+            return result.isSuccess()
+                    ? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.builder()
+                    .message(Constants.MESSAGE_OK)
+                    .code(HttpStatus.OK.value()).response(result.getValue()).build())
+                    : ResponseEntity.status(result.getStatusCode())
+                    .body(ResponseDTO.<String>builder()
+                            .message(Constants.MESSAGE_ERROR)
+                            .code(result.getStatusCode().value()).response(String.join("\n", result.getErrors())).build());
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDTO.builder()
+                    .message(Constants.MESSAGE_ERROR)
+                    .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                    .response(e.getMessage())
+                    .build());
+        }
+    }
     }
