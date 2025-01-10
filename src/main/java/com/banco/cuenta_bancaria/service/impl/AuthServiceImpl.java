@@ -134,4 +134,38 @@ public class AuthServiceImpl implements IAuthService {
         SecurityContextHolder.clearContext();
         return Result.success("Logout successful");
     }
+
+    private void saveUserToken(Usuario usuario, String  jwtToken) {
+        var token = Token.builder()
+                .usuario(usuario)
+                .token(jwtToken)
+                .type(Token.TokenType.BEARER)
+                .expired(false)
+                .revoked(false)
+                .build();
+        tokenRepository.save(token);
+    }
+
+    private void revokeAllUserTokens(Usuario usuario) {
+        final List<Token> validUserToken = tokenRepository
+                .findAllValidIsFalseOrRevokedIsFalseByUsuarioId(usuario.getId());
+        if (!validUserToken.isEmpty()) {
+            for (final Token token : validUserToken) {
+                token.setExpired(true);
+                token.setRevoked(true);
+            }
+            tokenRepository.saveAll(validUserToken);
+        }
+
+    }
+
+    private Result<TokenResponse, String> createErrorResult(String errorMessage, HttpStatus httpStatus) {
+        return Result.failure(Collections.singletonList(errorMessage), httpStatus);
+    }
+
+    private Usuario buildCliente(RegistrarUsuarioRequestDTO registrarUsuarioRequestDTO){
+        registrarUsuarioRequestDTO.setContrasena(passwordEncoder.encode(registrarUsuarioRequestDTO.getContrasena()));
+        return usuarioMapper.toUsuario(registrarUsuarioRequestDTO);
+    }
+
 }

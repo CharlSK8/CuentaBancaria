@@ -9,4 +9,5 @@ public interface IAuthService {
     Result<TokenResponse, String> register(RegistrarUsuarioRequestDTO clienteRegisterRequestDTOst);
     Result<TokenResponse, String> login(LoginRequestDTO loginRequest);
     Result<TokenResponse, String> refreshToken(String authHeader);
+    Result<String, String> logout(String authHeader);
 }
