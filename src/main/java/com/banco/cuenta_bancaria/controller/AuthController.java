@@ -158,4 +158,31 @@ public class AuthController {
                     .build());
         }
     }
+
+    /**
+     * Convierte un resultado de tipo {@link Result} en una respuesta de tipo {@link ResponseEntity}.
+     *
+     * Este método toma un objeto {@link Result} que contiene un valor de tipo {@link TokenResponse}
+     * o un error de tipo {@link String}. Dependiendo del estado del resultado, se crea una instancia
+     * de {@link ResponseEntity} que encapsula un {@link ResponseDTO} con la información adecuada.
+     * Si el resultado es exitoso, se devuelve el {@link TokenResponse} dentro de un {@link ResponseDTO}.
+     * Si hay un error, se devuelve un mensaje de error.
+     *
+     * @param result el objeto {@link Result} que contiene el resultado de la operación
+     *               (éxito con un {@link TokenResponse} o error con un mensaje de tipo {@link String}).
+     * @return una instancia de {@link ResponseEntity<ResponseDTO>} que contiene
+     *         la respuesta con el estado de la operación y los datos correspondientes.
+     */
+    private ResponseEntity<ResponseDTO>getResponseDTOResponseEntity(Result<TokenResponse, String> result) {
+        return result.isSuccess()
+                ? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.builder()
+                .message(Constants.MESSAGE_OK)
+                .code(HttpStatus.OK.value()).response(result.getValue()).build())
+                : ResponseEntity.status(result.getStatusCode())
+                .body(ResponseDTO.<String>builder()
+                        .message(Constants.MESSAGE_ERROR)
+                        .code(result.getStatusCode().value()).response(String.join("\n", result.getErrors())).build());
+    }
+
+
     }
