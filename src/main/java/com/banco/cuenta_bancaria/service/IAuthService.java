@@ -7,4 +7,5 @@ import com.banco.cuenta_bancaria.util.Result;
 
 public interface IAuthService {
     Result<TokenResponse, String> register(RegistrarUsuarioRequestDTO clienteRegisterRequestDTOst);
+    Result<TokenResponse, String> login(LoginRequestDTO loginRequest);
 }

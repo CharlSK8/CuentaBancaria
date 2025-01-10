@@ -62,4 +62,33 @@ public class AuthController {
         }
 
     }
+
+    /**
+     * Autentica un usuario y genera un token de acceso.
+     *
+     * Este método permite a un usuario iniciar sesión proporcionando las
+     * credenciales necesarias a través de un objeto {@link LoginRequestDTO}.
+     * Si las credenciales son válidas, se genera y devuelve un token de acceso
+     * que el usuario puede utilizar para autenticar futuras solicitudes.
+     *
+     * @param request el objeto que contiene las credenciales del usuario,
+     *                que deben ser validadas mediante la anotación {@link Valid}.
+     * @return una instancia de {@link ResponseEntity<ResponseDTO>} que contiene
+     *         la respuesta con el estado de la operación y el token de acceso generado.
+     * @throws Exception si ocurre algún error durante el proceso de autenticación del usuario.
+     */
+    @Operation(summary = "Autenticar usuario", description = "Permite a un usuario iniciar sesión y obtener un token de acceso.")
+    @PostMapping("/login")
+    public ResponseEntity<ResponseDTO> authenticate(@Valid @RequestBody final LoginRequestDTO request) {
+       try {
+           final Result<TokenResponse, String> result = service.login(request);
+           return getResponseDTOResponseEntity(result);
+       }catch (Exception e) {
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDTO.builder()
+                   .message(Constants.MESSAGE_ERROR)
+                   .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                   .response(e.getMessage())
+                   .build());
+       }
+    }
     }
