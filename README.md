@@ -43,4 +43,58 @@ El proyecto está construido siguiendo las mejores prácticas de desarrollo, imp
 - GET `/api/v1/movimientos` - Obtiene historial de movimientos
 - GET `/api/v1/movimientos/{id}` - Obtiene un movimiento específico
 
+# Pasos de Instalación
 
+1.  **Clonar el Repositorio**
+
+    ```bash
+    git clone https://github.com/CharlSK8/CuentaBancaria.git
+    ```
+
+2.  **Compilar el Proyecto**
+
+    ```bash
+    ./gradlew build  
+    ```
+
+3.  **Configurar la Base de Datos**
+
+    El proyecto utiliza H2 (base de datos en memoria), por lo que no requiere configuración adicional de base de datos.
+
+4.  **Ejecutar la Aplicación**
+
+    Hay dos formas de ejecutar el proyecto:
+
+    **Opción 1: Desde Gradle/Maven**
+
+    ```bash
+    ./gradlew bootRun
+    ```
+
+    **Opción 2: Desde el IDE**
+
+    1.  Abrir el proyecto en tu IDE preferido (IntelliJ IDEA, Eclipse, etc.).
+    2.  Localizar la clase principal (debe tener la anotación `@SpringBootApplication`).
+    3.  Ejecutar como aplicación Java.
+
+**Verificación**
+
+Una vez iniciada la aplicación:
+
+*   La API estará disponible en `http://localhost:8080`.
+*   Puedes probar los endpoints utilizando herramientas como Postman, Insomnia o cURL.
+
+**Endpoints Principales**
+
+Como se detalla en el README, podrás acceder a:
+
+*   Registro de usuarios: `POST /api/v1/usuarios/registrar`
+*   Login: `POST /api/v1/auth/login`
+*   Gestión de cuentas: `GET /api/v1/cuentas`, `POST /api/v1/cuentas`
+*   Gestión de movimientos: `GET /api/v1/movimientos`, `POST /api/v1/movimientos`
+
+**Notas Adicionales**
+
+*   Asegúrate de tener los puertos necesarios disponibles (por defecto 8080).
+*   La aplicación utiliza JWT para autenticación, por lo que necesitarás el token para acceder a los endpoints protegidos.
+*   Para pruebas, la base de datos H2 se reiniciará cada vez que se reinicie la aplicación.
