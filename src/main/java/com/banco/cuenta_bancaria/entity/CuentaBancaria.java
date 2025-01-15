@@ -12,10 +12,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -23,8 +25,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "cuenta_bancaria")
-public class CuentaBancaria {
+public class CuentaBancaria extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,5 +43,10 @@ public class CuentaBancaria {
 
     @OneToMany(mappedBy = "cuentaBancaria", cascade = CascadeType.ALL)
     private List<Movimiento> movimientos;
+
+    @PrePersist
+    public void prePersist() {
+        this.activa = true;
+    }
 
 }
