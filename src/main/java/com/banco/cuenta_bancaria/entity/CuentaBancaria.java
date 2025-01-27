@@ -25,9 +25,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+// @EqualsAndHashCode(callSuper = true)
 @Table(name = "cuenta_bancaria")
-public class CuentaBancaria extends Auditable {
+public class CuentaBancaria{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
