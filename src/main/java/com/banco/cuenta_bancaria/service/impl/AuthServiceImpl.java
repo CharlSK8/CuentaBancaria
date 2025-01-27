@@ -17,7 +17,7 @@ import com.banco.cuenta_bancaria.dto.request.LoginRequestDTO;
 import com.banco.cuenta_bancaria.dto.request.RegistrarUsuarioRequestDTO;
 import com.banco.cuenta_bancaria.dto.response.TokenResponse;
 import com.banco.cuenta_bancaria.entity.Token;
-import com.banco.cuenta_bancaria.entity.Usuario;
+import com.banco.cuenta_bancaria.entity.Usuario;    
 import com.banco.cuenta_bancaria.mapper.IUsuarioMapper;
 import com.banco.cuenta_bancaria.repository.ITokenRepository;
 import com.banco.cuenta_bancaria.repository.IUsuarioRepository;
@@ -40,6 +40,10 @@ public class AuthServiceImpl implements IAuthService {
 
     @Override
     public Result<TokenResponse, String> register(RegistrarUsuarioRequestDTO registrarUsuarioRequestDTO) {
+        final Optional<Usuario> userOptional = userRepository.findByCorreoAndActivoTrue(registrarUsuarioRequestDTO.getCorreo());
+        if(userOptional.isPresent()){
+            return Result.failure(List.of("El usuario con el correo " + registrarUsuarioRequestDTO.getCorreo()+ " , ya se encuentra registrado."), HttpStatus.BAD_REQUEST);
+        }
         var user = buildCliente(registrarUsuarioRequestDTO);
         var userSaved = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
@@ -54,7 +58,7 @@ public class AuthServiceImpl implements IAuthService {
         final Optional<Usuario> userOptional = userRepository.findByCorreoAndActivoTrue(loginRequest.getEmail());
 
         if(userOptional.isEmpty()){
-            return createErrorResult("Email not found", HttpStatus.NOT_FOUND);
+            return createErrorResult("Usuario no registrado.", HttpStatus.NOT_FOUND);
         }
         Usuario usuario = userOptional.get();
 
@@ -66,7 +70,7 @@ public class AuthServiceImpl implements IAuthService {
                             .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
                             .toList()));
         } catch (AuthenticationException e) {
-            return createErrorResult("Invalid email or password", HttpStatus.UNAUTHORIZED);
+            return createErrorResult("Correo o contraseña incorrecto.", HttpStatus.UNAUTHORIZED);
         }
 
         var jwtToken = jwtService.generateToken(usuario);
