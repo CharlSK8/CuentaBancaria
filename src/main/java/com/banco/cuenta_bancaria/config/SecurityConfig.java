@@ -30,13 +30,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
-                            "api/v1/auth/**",
+                            "/api/v1/auth/**",
                             "/docs/**",
+                            "/webjars/**",
                             "/swagger-ui/**",
-                            "/swagger-ui.html", 
-                            "/docs/swagger-ui/**", 
+                            "/swagger-ui.html",
                             "/v3/api-docs/**",
-                            "/h2-console/**"  
+                            "/h2-console/**"
                         ).permitAll()
                         .requestMatchers("/api/v1/movimiento").hasRole("ADMIN")
                         .anyRequest().authenticated()
