@@ -10,6 +10,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.MissingRequestValueException;
 
 import com.banco.cuenta_bancaria.dto.response.ResponseDTO;
 import com.banco.cuenta_bancaria.util.Constants;
@@ -34,6 +35,13 @@ public class ControllerAdvisor {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ResponseDTO<Object>> handleIlegalException(IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseDTO.builder()
+                .message(Constants.MESSAGE_ERROR_BODY)
+                .code(HttpStatus.BAD_REQUEST.value()).response(ex.getMessage()).build());
+    }
+
+    @ExceptionHandler(MissingRequestValueException.class)
+    public ResponseEntity<ResponseDTO<Object>> handleMissingRequestValueException(MissingRequestValueException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseDTO.builder()
                 .message(Constants.MESSAGE_ERROR_BODY)
                 .code(HttpStatus.BAD_REQUEST.value()).response(ex.getMessage()).build());
