@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.banco.cuenta_bancaria.dto.request.LoginRequestDTO;
 import com.banco.cuenta_bancaria.dto.request.RegistrarUsuarioRequestDTO;
 import com.banco.cuenta_bancaria.dto.response.ResponseDTO;
+import com.banco.cuenta_bancaria.dto.response.SaldoActualResponseDTO;
 import com.banco.cuenta_bancaria.dto.response.TokenResponse;
+import com.banco.cuenta_bancaria.dto.response.UserResponse;
 import com.banco.cuenta_bancaria.service.IAuthService;
 import com.banco.cuenta_bancaria.util.Constants;
 import com.banco.cuenta_bancaria.util.Result;
@@ -51,8 +53,15 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO> register(@Valid @RequestBody RegistrarUsuarioRequestDTO clienteRegisterRequestDTO) {
         try {
-            final Result<TokenResponse, String> result = service.register(clienteRegisterRequestDTO);
-            return getResponseDTOResponseEntity(result);
+            final Result<UserResponse, String> result = service.register(clienteRegisterRequestDTO);
+            return result.isSuccess()
+                    ? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.<UserResponse>builder()
+                            .message("Se ha registrado el usuario satisfactoriamente.")
+                            .code(HttpStatus.OK.value()).response(result.getValue()).build())
+                    : ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(ResponseDTO.<String>builder()
+                                    .message(String.join("\n", result.getErrors()))
+                                    .code(result.getStatusCode().value()).response(null).build());
         }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDTO.builder()
                     .message(Constants.MESSAGE_ERROR)
