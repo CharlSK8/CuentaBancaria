@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.banco.cuenta_bancaria.dto.request.LoginRequestDTO;
 import com.banco.cuenta_bancaria.dto.request.RegistrarUsuarioRequestDTO;
 import com.banco.cuenta_bancaria.dto.response.TokenResponse;
+import com.banco.cuenta_bancaria.dto.response.UserResponse;
 import com.banco.cuenta_bancaria.entity.Token;
 import com.banco.cuenta_bancaria.entity.Usuario;    
 import com.banco.cuenta_bancaria.mapper.IUsuarioMapper;
@@ -39,17 +40,14 @@ public class AuthServiceImpl implements IAuthService {
     private final IUsuarioMapper usuarioMapper;
 
     @Override
-    public Result<TokenResponse, String> register(RegistrarUsuarioRequestDTO registrarUsuarioRequestDTO) {
+    public Result<UserResponse, String> register(RegistrarUsuarioRequestDTO registrarUsuarioRequestDTO) {
         final Optional<Usuario> userOptional = userRepository.findByCorreoAndActivoTrue(registrarUsuarioRequestDTO.getCorreo());
         if(userOptional.isPresent()){
             return Result.failure(List.of("El usuario con el correo " + registrarUsuarioRequestDTO.getCorreo()+ " , ya se encuentra registrado."), HttpStatus.BAD_REQUEST);
         }
         var user = buildCliente(registrarUsuarioRequestDTO);
         Usuario userSaved = userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
-        saveUserToken(userSaved, jwtToken);
-        return Result.success(new TokenResponse(userSaved.getId(),jwtToken, refreshToken));
+        return Result.success(new UserResponse(userSaved.getId()));
     }
 
     @Override
