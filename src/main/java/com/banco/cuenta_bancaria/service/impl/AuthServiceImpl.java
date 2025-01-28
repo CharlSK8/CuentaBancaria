@@ -45,11 +45,11 @@ public class AuthServiceImpl implements IAuthService {
             return Result.failure(List.of("El usuario con el correo " + registrarUsuarioRequestDTO.getCorreo()+ " , ya se encuentra registrado."), HttpStatus.BAD_REQUEST);
         }
         var user = buildCliente(registrarUsuarioRequestDTO);
-        var userSaved = userRepository.save(user);
+        Usuario userSaved = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(userSaved, jwtToken);
-        return Result.success(new TokenResponse(jwtToken, refreshToken));
+        return Result.success(new TokenResponse(userSaved.getId(),jwtToken, refreshToken));
     }
 
     @Override
@@ -77,7 +77,7 @@ public class AuthServiceImpl implements IAuthService {
         var refreshToken = jwtService.generateRefreshToken(usuario);
         revokeAllUserTokens(usuario);
         saveUserToken(usuario, jwtToken);
-        return Result.success(new TokenResponse(jwtToken, refreshToken));
+        return Result.success(new TokenResponse(usuario.getId(),jwtToken, refreshToken));
     }
 
     @Override
@@ -117,7 +117,7 @@ public class AuthServiceImpl implements IAuthService {
         final String accessToken = jwtService.generateToken(usuario);
         revokeAllUserTokens(usuario);
         saveUserToken(usuario, accessToken);
-        return Result.success(new TokenResponse(accessToken, refreshToken));
+        return Result.success(new TokenResponse(usuario.getId(), accessToken, refreshToken));
 
     }
 
