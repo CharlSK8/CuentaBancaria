@@ -3,7 +3,6 @@ package com.banco.cuenta_bancaria.dto.request;
 import java.math.BigDecimal;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,8 +15,6 @@ import lombok.ToString;
 @AllArgsConstructor
 public class CrearCuentaRequestDTO {
 
-    @NotNull(message = "El campo 'numeroCuenta' es obligatorio")
-    private int numeroCuenta;
     @NotBlank(message = "El campo 'saldo' es obligatorio")
     private BigDecimal saldo;
     @NotBlank(message = "El campo 'tipoCuenta' es obligatorio")
