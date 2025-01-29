@@ -20,24 +20,8 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioServiceImpl implements IUsuarioService{
 
     private final IUsuarioRepository usuarioRepository;
+    private final IUsuarioMapper usuarioMapper;
 	
-	@Override
-    public Result<String, String> registrarUsuario(RegistrarUsuarioRequestDTO request) {
-		Optional<Usuario> usuario = usuarioRepository.findByNumeroIdetificacionAndActivoTrue(request.getNumeroIdetificacion());
-		if(usuario.isPresent()) {
-			return Result.failure(List.of("Usuario ya existe"), HttpStatus.BAD_REQUEST);
-		}
-        Usuario nuevoUsuario = Usuario.builder()
-                .nombre(request.getNombre())
-                .correo(request.getCorreo())
-                .numeroIdetificacion(request.getNumeroIdetificacion())
-                .build();
-                
-        usuarioRepository.save(nuevoUsuario);
-        return Result.success("Usuario registrado correctamente");
-    }
-
-
     @Override
     public Result<String, String> actualizarUsuario(Long id, ActualizarUsuarioRequestDTO request) {
         Optional<Usuario> usuario = usuarioRepository.findByIdAndActivoTrue(id);
