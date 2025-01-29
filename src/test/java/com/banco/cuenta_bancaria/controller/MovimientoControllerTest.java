@@ -43,7 +43,7 @@ class MovimientoControllerTest {
         when(movimientoService.mostrarMovimientos(numeroCuenta)).thenReturn(result);
 
         // Act
-        ResponseEntity<ResponseDTO> response = movimientoController.mostrarMovimientos(numeroCuenta);
+        ResponseEntity<ResponseDTO<?>> response = movimientoController.mostrarMovimientos(numeroCuenta);
 
         // Assert
         assertNotNull(response);
@@ -63,7 +63,7 @@ class MovimientoControllerTest {
         when(movimientoService.mostrarMovimientos(numeroCuenta)).thenReturn(result);
 
         // Act
-        ResponseEntity<ResponseDTO> response = movimientoController.mostrarMovimientos(numeroCuenta);
+        ResponseEntity<ResponseDTO<?>> response = movimientoController.mostrarMovimientos(numeroCuenta);
 
         // Assert
         assertNotNull(response);

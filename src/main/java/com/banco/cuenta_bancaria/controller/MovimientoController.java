@@ -27,7 +27,7 @@ public class MovimientoController {
     }
 
     @GetMapping("/movimientos/{numeroCuenta}")
-    public ResponseEntity<ResponseDTO> mostrarMovimientos(@PathVariable("numeroCuenta") int numeroCuenta) {
+    public ResponseEntity<ResponseDTO<?>> mostrarMovimientos(@PathVariable("numeroCuenta") int numeroCuenta) {
         Result<List<MovimientoResponseDTO>, String> result = movimientoService.mostrarMovimientos(numeroCuenta);
         return result.isSuccess()
 					? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.<List<MovimientoResponseDTO>>builder()
