@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.banco.cuenta_bancaria.dto.request.LoginRequestDTO;
 import com.banco.cuenta_bancaria.dto.request.RegistrarUsuarioRequestDTO;
 import com.banco.cuenta_bancaria.dto.response.ResponseDTO;
-import com.banco.cuenta_bancaria.dto.response.SaldoActualResponseDTO;
 import com.banco.cuenta_bancaria.dto.response.TokenResponse;
 import com.banco.cuenta_bancaria.dto.response.UserResponse;
 import com.banco.cuenta_bancaria.service.IAuthService;
@@ -51,14 +50,14 @@ public class AuthController {
      */
     @Operation(summary = "Registrar nuevo usuario", description = "Permite registrar un nuevo usuario y obtener un token de acceso.")
     @PostMapping("/register")
-    public ResponseEntity<ResponseDTO> register(@Valid @RequestBody RegistrarUsuarioRequestDTO clienteRegisterRequestDTO) {
+    public ResponseEntity<ResponseDTO<?>> register(@Valid @RequestBody RegistrarUsuarioRequestDTO clienteRegisterRequestDTO) {
         try {
             final Result<UserResponse, String> result = service.register(clienteRegisterRequestDTO);
             return result.isSuccess()
                     ? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.<UserResponse>builder()
                             .message("Se ha registrado el usuario satisfactoriamente.")
                             .code(HttpStatus.OK.value()).response(result.getValue()).build())
-                    : ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    : ResponseEntity.status(HttpStatus.OK)
                             .body(ResponseDTO.<String>builder()
                                     .message(String.join("\n", result.getErrors()))
                                     .code(result.getStatusCode().value()).response(null).build());
@@ -88,7 +87,7 @@ public class AuthController {
      */
     @Operation(summary = "Autenticar usuario", description = "Permite a un usuario iniciar sesión y obtener un token de acceso.")
     @PostMapping("/login")
-    public ResponseEntity<ResponseDTO> authenticate(@Valid @RequestBody final LoginRequestDTO request) {
+    public ResponseEntity<ResponseDTO<?>> authenticate(@Valid @RequestBody final LoginRequestDTO request) {
        try {
            final Result<TokenResponse, String> result = service.login(request);
            return getResponseDTOResponseEntity(result);
@@ -117,7 +116,7 @@ public class AuthController {
      */
     @Operation(summary = "Refrescar token de acceso", description = "Permite refrescar un token de acceso utilizando un token de refresco.")
     @PostMapping("/refresh")
-    public ResponseEntity<ResponseDTO> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+    public ResponseEntity<ResponseDTO<?>> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
         try {
             final Result<TokenResponse, String> result = service.refreshToken(authHeader);
             return getResponseDTOResponseEntity(result);
@@ -148,14 +147,14 @@ public class AuthController {
     @Operation(summary = "Cerrar sesión del usuario",
             description = "Cierra la sesión del usuario invalidando el token actual, revocando el acceso a futuras llamadas a la API.")
     @PostMapping("/logout")
-    public ResponseEntity<ResponseDTO> logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+    public ResponseEntity<ResponseDTO<?>> logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
         try {
             final Result<String, String> result = service.logout(authHeader);
             return result.isSuccess()
                     ? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.builder()
                     .message(Constants.MESSAGE_OK)
                     .code(HttpStatus.OK.value()).response(result.getValue()).build())
-                    : ResponseEntity.status(result.getStatusCode())
+                    : ResponseEntity.status(HttpStatus.OK)
                     .body(ResponseDTO.<String>builder()
                             .message(Constants.MESSAGE_ERROR)
                             .code(result.getStatusCode().value()).response(String.join("\n", result.getErrors())).build());
@@ -182,12 +181,12 @@ public class AuthController {
      * @return una instancia de {@link ResponseEntity<ResponseDTO>} que contiene
      *         la respuesta con el estado de la operación y los datos correspondientes.
      */
-    private ResponseEntity<ResponseDTO>getResponseDTOResponseEntity(Result<TokenResponse, String> result) {
+    private ResponseEntity<ResponseDTO<?>>getResponseDTOResponseEntity(Result<TokenResponse, String> result) {
         return result.isSuccess()
                 ? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.builder()
                 .message(Constants.MESSAGE_OK)
                 .code(HttpStatus.OK.value()).response(result.getValue()).build())
-                : ResponseEntity.status(result.getStatusCode())
+                : ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDTO.<String>builder()
                         .message(Constants.MESSAGE_ERROR)
                         .code(result.getStatusCode().value()).response(String.join("\n", result.getErrors())).build());
