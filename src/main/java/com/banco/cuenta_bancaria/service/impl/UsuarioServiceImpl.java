@@ -6,16 +6,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.banco.cuenta_bancaria.dto.request.ActualizarUsuarioRequestDTO;
-import com.banco.cuenta_bancaria.dto.request.RegistrarUsuarioRequestDTO;
+import com.banco.cuenta_bancaria.dto.response.UsuarioResponseDTO;
 import com.banco.cuenta_bancaria.entity.Usuario;
+import com.banco.cuenta_bancaria.mapper.IUsuarioMapper;
 import com.banco.cuenta_bancaria.repository.IUsuarioRepository;
 import com.banco.cuenta_bancaria.service.IUsuarioService;
 import com.banco.cuenta_bancaria.util.Result;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UsuarioServiceImpl implements IUsuarioService{
 
@@ -54,6 +57,16 @@ public class UsuarioServiceImpl implements IUsuarioService{
         usuario.get().setActivo(false);
         usuarioRepository.save(usuario.get());
         return Result.success("Usuario inactivado correctamente");
+    }
+
+
+    @Override
+    public Result<UsuarioResponseDTO, String> consultarUsuario(Long id) {
+        Optional<Usuario> usuario = usuarioRepository.findByIdAndActivoTrue(id);
+        if(!usuario.isPresent()) {
+            return Result.failure(List.of("Usuario no encontrado"), HttpStatus.BAD_REQUEST);
+        }
+        return Result.success(usuarioMapper.toResponseDTO(usuario.get()));
     }
 
 }
