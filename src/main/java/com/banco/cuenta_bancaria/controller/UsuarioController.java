@@ -54,10 +54,13 @@ public class UsuarioController {
     @PostMapping("/inactivar/{id}")
     public ResponseEntity<ResponseDTO<String>> inactivarUsuario(@PathVariable("id") Long id) {
         Result<String, String> result = usuarioService.inactivarUsuario(id);
+	@GetMapping("/consultar/{id}")
+    public ResponseEntity<ResponseDTO<?>> consultarUsuario(@PathVariable("id") Long id) {
+        Result<UsuarioResponseDTO, String> result = usuarioService.consultarUsuario(id);
         return result.isSuccess()
-					? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.<String>builder()
-							.message(result.getValue())
-							.code(HttpStatus.OK.value()).response(null).build())
+					? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.<UsuarioResponseDTO>builder()
+							.message("Se ha consultado el usuario satisfactoriamente.")
+							.code(HttpStatus.OK.value()).response(result.getValue()).build())
 					: ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body(ResponseDTO.<String>builder()
 							.message(String.join("\n", result.getErrors()))
