@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.banco.cuenta_bancaria.dto.request.CrearCuentaRequestDTO;
 import com.banco.cuenta_bancaria.dto.request.DepositoCuentaRequestDTO;
 import com.banco.cuenta_bancaria.dto.request.RetiroCuentaRequestDTO;
-import com.banco.cuenta_bancaria.dto.request.SaldoActualRequestDTO;
+import com.banco.cuenta_bancaria.dto.response.CuentaBancariaCreadaResponse;
 import com.banco.cuenta_bancaria.dto.response.ResponseDTO;
 import com.banco.cuenta_bancaria.dto.response.SaldoActualResponseDTO;
 import com.banco.cuenta_bancaria.service.ICuentaBancariaService;
@@ -21,7 +21,7 @@ import com.banco.cuenta_bancaria.util.Result;
 
 @RestController
 @RequestMapping("/api/v1/cuenta-bancaria")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials = "true")
 public class CuentaBancariaController {
 
     private ICuentaBancariaService cuentaBancariaService;
@@ -31,12 +31,12 @@ public class CuentaBancariaController {
     }
 
     @PostMapping("/crear-cuenta")
-    public ResponseEntity<ResponseDTO<String>> crearCuenta(@RequestBody CrearCuentaRequestDTO crearCuentaRequestDTO) {
-        Result<String, String> result = cuentaBancariaService.crearCuentaBancaria(crearCuentaRequestDTO);
+    public ResponseEntity<ResponseDTO<?>> crearCuenta(@RequestBody CrearCuentaRequestDTO crearCuentaRequestDTO) {
+        Result<CuentaBancariaCreadaResponse, String> result = cuentaBancariaService.crearCuentaBancaria(crearCuentaRequestDTO);
         return result.isSuccess()
-                ? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.<String>builder()
-                        .message(result.getValue())
-                        .code(HttpStatus.OK.value()).response(null).build())
+                ? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.<CuentaBancariaCreadaResponse>builder()
+                        .message("Se ha creado la cuenta satisfactoriamente.")
+                        .code(HttpStatus.OK.value()).response(result.getValue()).build())
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(ResponseDTO.<String>builder()
                                 .message(String.join("\n", result.getErrors()))
@@ -45,7 +45,7 @@ public class CuentaBancariaController {
 
 
     @GetMapping("/mostrar-saldo-actual/{numeroCuenta}")
-    public ResponseEntity<ResponseDTO> mostrarSaldo(@PathVariable("numeroCuenta") int numeroCuenta) {
+    public ResponseEntity<ResponseDTO<?>> mostrarSaldo(@PathVariable("numeroCuenta") int numeroCuenta) {
         Result<SaldoActualResponseDTO, String> result = cuentaBancariaService.mostrarSaldoActual(numeroCuenta);
         return result.isSuccess()
                 ? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.<SaldoActualResponseDTO>builder()

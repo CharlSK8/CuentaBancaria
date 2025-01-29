@@ -34,26 +34,35 @@ class CuentaBancariaControllerTest {
 
     @Test
     void crearCuenta_CuandoEsExitoso_RetornaResponseEntityOK() {
+        // Arrange
         CrearCuentaRequestDTO request = new CrearCuentaRequestDTO();
-        Result<String, String> successResult = Result.success("Cuenta creada exitosamente");
+        CuentaBancariaCreadaResponse cuentaCreada = new CuentaBancariaCreadaResponse(); // Crea un objeto de respuesta
+        Result<CuentaBancariaCreadaResponse, String> successResult = Result.success(cuentaCreada);
         when(cuentaBancariaService.crearCuentaBancaria(request)).thenReturn(successResult);
 
-        ResponseEntity<ResponseDTO<String>> response = cuentaBancariaController.crearCuenta(request);
+        // Act
+        ResponseEntity<ResponseDTO<?>> response = cuentaBancariaController.crearCuenta(request);
 
+        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Cuenta creada exitosamente", response.getBody().getMessage());
+        assertEquals("Se ha creado la cuenta satisfactoriamente.", response.getBody().getMessage());
+        assertEquals(cuentaCreada, ((ResponseDTO<CuentaBancariaCreadaResponse>) response.getBody()).getResponse()); 
     }
 
     @Test
     void crearCuenta_CuandoHayError_RetornaResponseEntityBadRequest() {
+        // Arrange
         CrearCuentaRequestDTO request = new CrearCuentaRequestDTO();
-        Result<String, String> errorResult = Result.failure(List.of("Error al crear cuenta"), HttpStatus.BAD_REQUEST);
+        List<String> errors = List.of("Error 1", "Error 2"); 
+        Result<CuentaBancariaCreadaResponse, String> errorResult = Result.failure(errors, HttpStatus.BAD_REQUEST);
         when(cuentaBancariaService.crearCuentaBancaria(request)).thenReturn(errorResult);
 
-        ResponseEntity<ResponseDTO<String>> response = cuentaBancariaController.crearCuenta(request);
+        // Act
+        ResponseEntity<ResponseDTO<?>> response = cuentaBancariaController.crearCuenta(request);
 
+        // Assert
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Error al crear cuenta", response.getBody().getMessage());
+        assertEquals(String.join("\n", errors), response.getBody().getMessage()); 
     }
 
     @Test
@@ -63,7 +72,7 @@ class CuentaBancariaControllerTest {
         Result<SaldoActualResponseDTO, String> successResult = Result.success(saldoResponse);
         when(cuentaBancariaService.mostrarSaldoActual(numeroCuenta)).thenReturn(successResult);
 
-        ResponseEntity<ResponseDTO> response = cuentaBancariaController.mostrarSaldo(numeroCuenta);
+        ResponseEntity<ResponseDTO<?>> response = cuentaBancariaController.mostrarSaldo(numeroCuenta);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Se ha mostrado el saldo correctamente", response.getBody().getMessage());
