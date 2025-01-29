@@ -5,12 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.banco.cuenta_bancaria.dto.request.ActualizarUsuarioRequestDTO;
-import com.banco.cuenta_bancaria.dto.request.RegistrarUsuarioRequestDTO;
 import com.banco.cuenta_bancaria.dto.response.ResponseDTO;
+import com.banco.cuenta_bancaria.dto.response.UsuarioResponseDTO;
 import com.banco.cuenta_bancaria.service.IUsuarioService;
 import com.banco.cuenta_bancaria.util.Result;
-
-import jakarta.validation.Valid;
 
 
 @RestController
@@ -24,19 +22,6 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    @PostMapping("/registrar")
-    public ResponseEntity<ResponseDTO<String>> registrarUsuario(@Valid @RequestBody RegistrarUsuarioRequestDTO request) {
-        Result<String, String> result = usuarioService.registrarUsuario(request);
-
-        return result.isSuccess()
-					? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.<String>builder()
-							.message(result.getValue())
-							.code(HttpStatus.OK.value()).response(null).build())
-					: ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(ResponseDTO.<String>builder()
-							.message(String.join("\n", result.getErrors()))
-							.code(result.getStatusCode().value()).response(null).build());
-    }
 
     @PostMapping("/actualizar/{id}")
     public ResponseEntity<ResponseDTO<String>> actualizarUsuario(@PathVariable("id") Long id, @RequestBody ActualizarUsuarioRequestDTO request) {
@@ -58,6 +43,19 @@ public class UsuarioController {
 					? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.<String>builder()
 							.message(result.getValue())
 							.code(HttpStatus.OK.value()).response(null).build())
+					: ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(ResponseDTO.<String>builder()
+							.message(String.join("\n", result.getErrors()))
+							.code(result.getStatusCode().value()).response(null).build());
+    }
+
+	@GetMapping("/consultar/{id}")
+    public ResponseEntity<ResponseDTO<?>> consultarUsuario(@PathVariable("id") Long id) {
+        Result<UsuarioResponseDTO, String> result = usuarioService.consultarUsuario(id);
+        return result.isSuccess()
+					? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.<UsuarioResponseDTO>builder()
+							.message("Se ha consultado el usuario satisfactoriamente.")
+							.code(HttpStatus.OK.value()).response(result.getValue()).build())
 					: ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body(ResponseDTO.<String>builder()
 							.message(String.join("\n", result.getErrors()))
