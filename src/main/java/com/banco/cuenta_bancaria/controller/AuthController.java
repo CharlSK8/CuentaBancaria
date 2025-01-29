@@ -188,8 +188,8 @@ public class AuthController {
                 .code(HttpStatus.OK.value()).response(result.getValue()).build())
                 : ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDTO.<String>builder()
-                        .message(Constants.MESSAGE_ERROR)
-                        .code(result.getStatusCode().value()).response(String.join("\n", result.getErrors())).build());
+                        .message(String.join("\n", result.getErrors()))
+                        .code(result.getStatusCode().value()).response(Constants.MESSAGE_ERROR).build());
     }
 
 
