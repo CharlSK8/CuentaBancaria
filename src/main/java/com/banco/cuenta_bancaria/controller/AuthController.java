@@ -117,7 +117,7 @@ public class AuthController {
      */
     @Operation(summary = "Refrescar token de acceso", description = "Permite refrescar un token de acceso utilizando un token de refresco.")
     @PostMapping("/refresh")
-    public ResponseEntity<ResponseDTO> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+    public ResponseEntity<ResponseDTO<?>> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
         try {
             final Result<TokenResponse, String> result = service.refreshToken(authHeader);
             return getResponseDTOResponseEntity(result);
@@ -182,7 +182,7 @@ public class AuthController {
      * @return una instancia de {@link ResponseEntity<ResponseDTO>} que contiene
      *         la respuesta con el estado de la operación y los datos correspondientes.
      */
-    private ResponseEntity<ResponseDTO>getResponseDTOResponseEntity(Result<TokenResponse, String> result) {
+    private ResponseEntity<ResponseDTO<?>>getResponseDTOResponseEntity(Result<TokenResponse, String> result) {
         return result.isSuccess()
                 ? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.builder()
                 .message(Constants.MESSAGE_OK)
