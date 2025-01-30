@@ -88,17 +88,17 @@ public class AuthController {
      */
     @Operation(summary = "Autenticar usuario", description = "Permite a un usuario iniciar sesión y obtener un token de acceso.")
     @PostMapping("/login")
-    public ResponseEntity<ResponseDTO> authenticate(@Valid @RequestBody final LoginRequestDTO request) {
-       try {
-           final Result<TokenResponse, String> result = service.login(request);
-           return getResponseDTOResponseEntity(result);
-       }catch (Exception e) {
-           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDTO.builder()
-                   .message(Constants.MESSAGE_ERROR)
-                   .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                   .response(e.getMessage())
-                   .build());
-       }
+    public ResponseEntity<ResponseDTO<?>> authenticate(@Valid @RequestBody final LoginRequestDTO request) {
+        try {
+            final Result<TokenResponse, String> result = service.login(request);
+            return getResponseDTOResponseEntity(result);
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDTO.builder()
+                    .message(Constants.MESSAGE_ERROR)
+                    .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                    .response(e.getMessage())
+                    .build());
+        }
     }
 
     /**
