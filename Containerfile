@@ -15,6 +15,6 @@ WORKDIR /app
 
 COPY --from=build /app/build/libs/cuenta-bancaria-1.0.0.jar /app/CuentaBancaria.jar
 
-EXPOSE 8093
+EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "CuentaBancaria.jar"]
