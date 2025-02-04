@@ -3,7 +3,6 @@ package com.banco.cuenta_bancaria.dto.response;
 import java.util.List;
 import java.util.Set;
 
-import com.banco.cuenta_bancaria.entity.CuentaBancaria;
 import com.banco.cuenta_bancaria.enums.Roles;
 
 import lombok.AllArgsConstructor;

@@ -28,7 +28,7 @@ public class MovimientoController {
     }
 
     @GetMapping("/movimientos/{numeroCuenta}")
-    public ResponseEntity<ResponseDTO> mostrarMovimientos(@PathVariable("numeroCuenta") int numeroCuenta) {
+    public ResponseEntity<ResponseDTO<?>> mostrarMovimientos(@PathVariable("numeroCuenta") int numeroCuenta) {
         Result<List<MovimientoResponseDTO>, String> result = movimientoService.mostrarMovimientos(numeroCuenta);
         try{
             return result.isSuccess()
@@ -45,9 +45,6 @@ public class MovimientoController {
                     .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
                     .response(e.getMessage())
                     .build());
-}
-
-                            
+        }
     }
-
 }

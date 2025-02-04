@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.banco.cuenta_bancaria.dto.request.LoginRequestDTO;
 import com.banco.cuenta_bancaria.dto.request.RegistrarUsuarioRequestDTO;
 import com.banco.cuenta_bancaria.dto.response.ResponseDTO;
-import com.banco.cuenta_bancaria.dto.response.SaldoActualResponseDTO;
 import com.banco.cuenta_bancaria.dto.response.TokenResponse;
 import com.banco.cuenta_bancaria.dto.response.UserResponse;
 import com.banco.cuenta_bancaria.service.IAuthService;
@@ -51,7 +50,7 @@ public class AuthController {
      */
     @Operation(summary = "Registrar nuevo usuario", description = "Permite registrar un nuevo usuario y obtener un token de acceso.")
     @PostMapping("/register")
-    public ResponseEntity<ResponseDTO> register(@Valid @RequestBody RegistrarUsuarioRequestDTO clienteRegisterRequestDTO) {
+    public ResponseEntity<ResponseDTO<?>> register(@Valid @RequestBody RegistrarUsuarioRequestDTO clienteRegisterRequestDTO) {
         try {
             final Result<UserResponse, String> result = service.register(clienteRegisterRequestDTO);
             return result.isSuccess()
@@ -148,7 +147,7 @@ public class AuthController {
     @Operation(summary = "Cerrar sesión del usuario",
             description = "Cierra la sesión del usuario invalidando el token actual, revocando el acceso a futuras llamadas a la API.")
     @PostMapping("/logout")
-    public ResponseEntity<ResponseDTO> logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+    public ResponseEntity<ResponseDTO<?>> logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
         try {
             final Result<String, String> result = service.logout(authHeader);
             return result.isSuccess()
