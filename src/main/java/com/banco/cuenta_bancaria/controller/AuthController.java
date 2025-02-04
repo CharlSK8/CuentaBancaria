@@ -88,17 +88,17 @@ public class AuthController {
      */
     @Operation(summary = "Autenticar usuario", description = "Permite a un usuario iniciar sesión y obtener un token de acceso.")
     @PostMapping("/login")
-    public ResponseEntity<ResponseDTO> authenticate(@Valid @RequestBody final LoginRequestDTO request) {
-       try {
-           final Result<TokenResponse, String> result = service.login(request);
-           return getResponseDTOResponseEntity(result);
-       }catch (Exception e) {
-           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDTO.builder()
-                   .message(Constants.MESSAGE_ERROR)
-                   .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                   .response(e.getMessage())
-                   .build());
-       }
+    public ResponseEntity<ResponseDTO<?>> authenticate(@Valid @RequestBody final LoginRequestDTO request) {
+        try {
+            final Result<TokenResponse, String> result = service.login(request);
+            return getResponseDTOResponseEntity(result);
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDTO.builder()
+                    .message(Constants.MESSAGE_ERROR)
+                    .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                    .response(e.getMessage())
+                    .build());
+        }
     }
 
     /**
@@ -117,7 +117,7 @@ public class AuthController {
      */
     @Operation(summary = "Refrescar token de acceso", description = "Permite refrescar un token de acceso utilizando un token de refresco.")
     @PostMapping("/refresh")
-    public ResponseEntity<ResponseDTO> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+    public ResponseEntity<ResponseDTO<?>> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
         try {
             final Result<TokenResponse, String> result = service.refreshToken(authHeader);
             return getResponseDTOResponseEntity(result);
@@ -182,7 +182,7 @@ public class AuthController {
      * @return una instancia de {@link ResponseEntity<ResponseDTO>} que contiene
      *         la respuesta con el estado de la operación y los datos correspondientes.
      */
-    private ResponseEntity<ResponseDTO>getResponseDTOResponseEntity(Result<TokenResponse, String> result) {
+    private ResponseEntity<ResponseDTO<?>>getResponseDTOResponseEntity(Result<TokenResponse, String> result) {
         return result.isSuccess()
                 ? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.builder()
                 .message(Constants.MESSAGE_OK)
