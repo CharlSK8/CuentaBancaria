@@ -34,7 +34,6 @@ class MovimientoControllerTest {
 
     @Test
     void mostrarMovimientos_CuandoExistenMovimientos_RetornaMovimientosExitosamente() {
-        // Arrange
         int numeroCuenta = 123456;
         List<MovimientoResponseDTO> movimientos = new ArrayList<>();
         movimientos.add(new MovimientoResponseDTO(/* agregar datos de prueba */));
@@ -42,12 +41,12 @@ class MovimientoControllerTest {
         
         when(movimientoService.mostrarMovimientos(numeroCuenta)).thenReturn(result);
 
-        // Act
-        ResponseEntity<ResponseDTO> response = movimientoController.mostrarMovimientos(numeroCuenta);
+        ResponseEntity<ResponseDTO<?>> response = movimientoController.mostrarMovimientos(numeroCuenta);
 
         // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
         assertEquals("Se ha mostrado los movimientos correctamente", response.getBody().getMessage());
         assertEquals(HttpStatus.OK.value(), response.getBody().getCode());
         assertEquals(movimientos, response.getBody().getResponse());
@@ -55,17 +54,14 @@ class MovimientoControllerTest {
 
     @Test
     void mostrarMovimientos_CuandoNoExistenMovimientos_RetornaError() {
-        // Arrange
         int numeroCuenta = 123456;
         String errorMessage = "No se encontraron movimientos para la cuenta especificada";
         Result<List<MovimientoResponseDTO>, String> result = Result.failure(List.of(errorMessage), HttpStatus.BAD_REQUEST);
         
         when(movimientoService.mostrarMovimientos(numeroCuenta)).thenReturn(result);
 
-        // Act
-        ResponseEntity<ResponseDTO> response = movimientoController.mostrarMovimientos(numeroCuenta);
+        ResponseEntity<ResponseDTO<?>> response = movimientoController.mostrarMovimientos(numeroCuenta);
 
-        // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(errorMessage, response.getBody().getMessage());

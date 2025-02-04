@@ -3,6 +3,8 @@ package com.banco.cuenta_bancaria.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.banco.cuenta_bancaria.dto.request.ActualizarUsuarioRequestDTO;
 import com.banco.cuenta_bancaria.dto.response.ResponseDTO;
+import com.banco.cuenta_bancaria.dto.response.UsuarioResponseDTO;
 import com.banco.cuenta_bancaria.service.IUsuarioService;
 import com.banco.cuenta_bancaria.util.Result;
 
@@ -36,7 +39,7 @@ class UsuarioControllerTest {
         ResponseEntity<ResponseDTO<String>> response = usuarioController.actualizarUsuario(id, request);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Usuario actualizado exitosamente", response.getBody().getMessage());
+        assertEquals("Usuario actualizado exitosamente",response.getBody().getMessage());
         assertEquals(HttpStatus.OK.value(), response.getBody().getCode());
     }
 
@@ -52,4 +55,34 @@ class UsuarioControllerTest {
         assertEquals("Usuario inactivado exitosamente", response.getBody().getMessage());
         assertEquals(HttpStatus.OK.value(), response.getBody().getCode());
     }
+
+    @Test
+    void consultarUsuario_CuandoEsExitoso_RetornaOk() {
+        Long id = 1L;
+        UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO();
+        Result<UsuarioResponseDTO, String> result = Result.success(usuarioResponseDTO);
+        when(usuarioService.consultarUsuario(id)).thenReturn(result);
+
+        ResponseEntity<ResponseDTO<?>> response = usuarioController.consultarUsuario(id);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Se ha consultado el usuario satisfactoriamente.", response.getBody().getMessage());
+        assertEquals(HttpStatus.OK.value(), response.getBody().getCode());
+        assertEquals(usuarioResponseDTO, response.getBody().getResponse());
+    }
+
+    @Test
+    void consultarUsuario_CuandoFalla_RetornaBadRequest() {
+        Long id = 1L;
+        Result<UsuarioResponseDTO, String> result = Result.failure(List.of("Error al consultar usuario"), HttpStatus.BAD_REQUEST);
+        when(usuarioService.consultarUsuario(id)).thenReturn(result);
+
+        ResponseEntity<ResponseDTO<?>> response = usuarioController.consultarUsuario(id);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Error al consultar usuario", response.getBody().getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getBody().getCode());
+        assertEquals(null, response.getBody().getResponse());
+    }
+
 }
