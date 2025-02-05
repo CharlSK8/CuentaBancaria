@@ -37,3 +37,4 @@ jobs:
         with:
           args:
             -Dsonar.projectKey=CharlSK8_CuentaBancaria
+            -Dsonar.organization=CharlSK8_CuentaBancaria
