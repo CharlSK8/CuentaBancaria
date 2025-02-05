@@ -11,6 +11,8 @@ RUN gradle build
 
 FROM eclipse-temurin:17-jre-alpine
 
+RUN apk add --no-cache bash
+
 WORKDIR /app
 
 COPY --from=build /app/build/libs/cuenta-bancaria-1.0.0.jar /app/CuentaBancaria.jar
