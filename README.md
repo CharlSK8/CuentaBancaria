@@ -35,7 +35,7 @@ Este documento proporciona los pasos para obtener, ejecutar y administrar un con
 - **Correr el contenedor**
 
     ```sh
-    podman run --rm --name <CONTAINER-NAME> -p 8080:8080 -d <IMAGE-NAME>
+    podman run --rm --name jwt -p 8080:8080 -d <IMAGE-NAME>
     ```
 
 ## Generar imagen
