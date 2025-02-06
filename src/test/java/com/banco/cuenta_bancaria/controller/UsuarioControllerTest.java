@@ -44,6 +44,21 @@ class UsuarioControllerTest {
     }
 
     @Test
+    void actualizarUsuario_CuandoFalla_RetornaBadRequest() {
+        Long id = 1L;
+        ActualizarUsuarioRequestDTO request = new ActualizarUsuarioRequestDTO();
+        Result<String, String> result = Result.failure(List.of("Error al consultar usuario"), HttpStatus.BAD_REQUEST);
+        when(usuarioService.actualizarUsuario(id, request)).thenReturn(result);
+
+        ResponseEntity<ResponseDTO<String>> response = usuarioController.actualizarUsuario(id, request);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Error al consultar usuario", response.getBody().getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getBody().getCode());
+        assertEquals(null, response.getBody().getResponse());
+    }
+
+    @Test
     void inactivarUsuario_CuandoEsExitoso_RetornaOk() {
         Long id = 1L;
         Result<String, String> result = Result.success("Usuario inactivado exitosamente");
@@ -54,6 +69,20 @@ class UsuarioControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Usuario inactivado exitosamente", response.getBody().getMessage());
         assertEquals(HttpStatus.OK.value(), response.getBody().getCode());
+    }
+
+    @Test
+    void inactivarUsuario__CuandoFalla_RetornaBadRequest() {
+        Long id = 1L;
+        Result<String, String> result = Result.failure(List.of("Error al consultar usuario"), HttpStatus.BAD_REQUEST);
+        when(usuarioService.inactivarUsuario(id)).thenReturn(result);
+
+        ResponseEntity<ResponseDTO<String>> response = usuarioController.inactivarUsuario(id);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Error al consultar usuario", response.getBody().getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getBody().getCode());
+        assertEquals(null, response.getBody().getResponse());
     }
 
     @Test
