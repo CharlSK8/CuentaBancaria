@@ -11,6 +11,17 @@ jacocoTestReport {
     reports {
         xml.required = true
     }
+	afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect { file ->
+            fileTree(dir: file, exclude: [
+                'com/banco/cuenta_bancaria/dto/**',
+                'com/banco/cuenta_bancaria/entity/**',
+                'com/banco/cuenta_bancaria/enums/**',
+				'com/banco/cuenta_bancaria/exception/**',
+				'com/banco/cuenta_bancaria/mapper/**'
+            ])
+        }))
+    }
 }
 
 group = 'com.banco'
