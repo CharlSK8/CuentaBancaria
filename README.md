@@ -140,3 +140,5 @@ Como se detalla en el README, podrás acceder a:
 - Asegúrate de tener los puertos necesarios disponibles (por defecto 8080).
 - La aplicación utiliza JWT para autenticación, por lo que necesitarás el token para acceder a los endpoints protegidos.
 - Para pruebas, la base de datos H2 se reiniciará cada vez que se reinicie la aplicación.
+
+## Test assessment 2
