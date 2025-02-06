@@ -43,7 +43,7 @@ jobs:
           args:
             -Dsonar.projectKey=CharlSK8_CuentaBancaria
             -Dsonar.organization=charlsk8
-            -Dsonar.sources=src/main
+            -Dsonar.sources=src
             -Dsonar.java.binaries=build/classes/java/main
             -Dsonar.java.source=17
             -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
