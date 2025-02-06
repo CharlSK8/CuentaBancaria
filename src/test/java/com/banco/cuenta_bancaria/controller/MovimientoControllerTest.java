@@ -43,7 +43,6 @@ class MovimientoControllerTest {
 
         ResponseEntity<ResponseDTO<?>> response = movimientoController.mostrarMovimientos(numeroCuenta);
 
-        // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
