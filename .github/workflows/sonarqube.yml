@@ -62,12 +62,7 @@ jobs:
             -Dsonar.java.source=17
             -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
             -Dsonar.java.libraries=build/libs/*.jar
-            -Dsonar.scm.provider=git
 
-      # - name: Check Quality Gate status
-      #   uses: SonarSource/sonarqube-quality-gate-action@master
-      #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   Publish:
     runs-on: ubuntu-latest
