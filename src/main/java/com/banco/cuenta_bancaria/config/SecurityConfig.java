@@ -45,7 +45,8 @@ public class SecurityConfig implements WebMvcConfigurer {
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**",
-                                "/h2-console/**"
+                                "/h2-console/**",
+                                "/publishMessage"
                         ).permitAll()
                         .requestMatchers("/api/v1/movimiento").hasRole("ADMIN")
                         .anyRequest().authenticated()
