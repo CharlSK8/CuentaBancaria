@@ -37,6 +37,7 @@ public class CuentaBancaria{
     private BigDecimal saldo;
     private String tipoCuenta;
     private boolean activa;
+    private Long numeroIdentificacion;
 
     @OneToMany(mappedBy = "cuentaBancaria", cascade = CascadeType.ALL)
     private List<Movimiento> movimientos;

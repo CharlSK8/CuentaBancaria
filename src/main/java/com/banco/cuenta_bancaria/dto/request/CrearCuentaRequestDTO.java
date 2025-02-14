@@ -20,8 +20,8 @@ public class CrearCuentaRequestDTO {
     @NotBlank(message = "El campo 'tipoCuenta' es obligatorio")
     @Pattern(regexp = "^(CORRIENTE|AHORROS)$", message = "El tipo de cuenta debe ser 'CORRIENTE' o 'AHORROS'")
     private String tipoCuenta;
-    @NotBlank(message = "El campo 'numeroIdetificacion' es obligatorio")
-    private String numeroIdetificacion;
+    @NotBlank(message = "El campo 'numeroIdentificacion' es obligatorio")
+    private String numeroIdentificacion;
     
 }
 

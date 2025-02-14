@@ -41,7 +41,7 @@ public class CuentaBancariaServiceImpl implements ICuentaBancariaService {
     public Result<CuentaBancariaCreadaResponse, String> crearCuentaBancaria(CrearCuentaRequestDTO request) {
 
 
-//        Optional<Usuario> usuario = usuarioRepository.findByNumeroIdetificacionAndActivoTrue(request.getNumeroIdetificacion());
+//        Optional<Usuario> usuario = usuarioRepository.findBynumeroIdentificacionAndActivoTrue(request.getnumeroIdentificacion());
 //        if(!usuario.isPresent()) {
 //            return Result.failure(List.of("Usuario no encontrado"), HttpStatus.BAD_REQUEST);
 //        }
@@ -54,6 +54,7 @@ public class CuentaBancariaServiceImpl implements ICuentaBancariaService {
         // ActiveMQ
         CuentaBancariaEventMessage eventMessage = new CuentaBancariaEventMessage("REGISTER",
                 cuentaGuardada.getNumeroCuenta(),
+                cuentaGuardada.getNumeroIdentificacion(),
                 cuentaGuardada.getSaldo(),
                 cuentaGuardada.getTipoCuenta(),
                 cuentaGuardada.isActiva());

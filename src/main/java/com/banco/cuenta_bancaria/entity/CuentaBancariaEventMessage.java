@@ -16,6 +16,7 @@ public class CuentaBancariaEventMessage implements Serializable {
 
     private String eventType; // "REGISTER"
     private int numeroCuenta;
+    private Long numeroIdentificacion;
     private BigDecimal saldo;
     private String tipoCuenta;
     private boolean activa;
