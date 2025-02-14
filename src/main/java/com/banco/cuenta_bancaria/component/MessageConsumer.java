@@ -12,8 +12,20 @@ public class MessageConsumer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageConsumer.class);
 
-    @JmsListener(destination = "QueueAuthCustomer", containerFactory = "jmsListenerContainerFactory")
-    public void messageListener(Object eventMessage) {
+    //Topic for Logout
+    @JmsListener(destination = "auth-topic", containerFactory = "jmsListenerContainerFactory")
+    public void listenAuthTopic(Object eventMessage) {
+        LOGGER.info("📩 App1 Cuenta Bancaria 'Topic' recibió");
+        processMessage(eventMessage, "auth-topic", "AUTH_API");
+    }
+
+    //Queues
+    /*@JmsListener(destination = "auth-queue", containerFactory = "jmsListenerContainerFactory")
+    public void listenAuthQueue(Object eventMessage) {
+        processMessage(eventMessage, "auth-queue", "AUTH_API");
+    }*/
+
+    /*public void processMessage(Object eventMessage, String queueName, String app) {
         try {
             String jsonMessage;
 
@@ -26,11 +38,11 @@ public class MessageConsumer {
                 LOGGER.warn("Tipo de mensaje desconocido: {}", eventMessage.getClass().getName());
                 return;
             }
-            System.out.println("📩 Evento recibido (JSON): " + jsonMessage);
-            LOGGER.info("JSON Message received: {}", jsonMessage);
+            System.out.println("📩 Evento recibido de APP: "+ app +" Cola: "+ queueName + ": " + jsonMessage);
+            LOGGER.info("JSON Message received from {}: Cola:{}: {}", app, queueName, jsonMessage);
 
         } catch (Exception e) {
-            LOGGER.error("Error processing message: {}", e.getMessage(), e);
+            LOGGER.error("Error processing message from {}: Cola: {}: {}",app, queueName, e.getMessage(), e);
         }
     }
 }*/

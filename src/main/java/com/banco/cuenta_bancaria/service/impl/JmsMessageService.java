@@ -21,7 +21,7 @@ public class JmsMessageService {
 
     public void sendEvent(String appMessage, Object message) {
         try {
-            jmsTemplate.convertAndSend("QueueAuthCustomer", message, msg -> {
+            jmsTemplate.convertAndSend("app_op_bank-queue", message, msg -> {
                 msg.setStringProperty("appMessage", appMessage);
                 msg.setStringProperty("_type", message.getClass().getName()); // Tipo dinámico del mensaje
                 return msg;
