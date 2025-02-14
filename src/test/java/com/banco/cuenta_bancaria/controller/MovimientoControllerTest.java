@@ -38,7 +38,7 @@ class MovimientoControllerTest {
         List<MovimientoResponseDTO> movimientos = new ArrayList<>();
         movimientos.add(new MovimientoResponseDTO(/* agregar datos de prueba */));
         Result<List<MovimientoResponseDTO>, String> result = Result.success(movimientos);
-        
+
         when(movimientoService.mostrarMovimientos(numeroCuenta)).thenReturn(result);
 
         ResponseEntity<ResponseDTO<?>> response = movimientoController.mostrarMovimientos(numeroCuenta);
@@ -56,7 +56,7 @@ class MovimientoControllerTest {
         int numeroCuenta = 123456;
         String errorMessage = "No se encontraron movimientos para la cuenta especificada";
         Result<List<MovimientoResponseDTO>, String> result = Result.failure(List.of(errorMessage), HttpStatus.BAD_REQUEST);
-        
+
         when(movimientoService.mostrarMovimientos(numeroCuenta)).thenReturn(result);
 
         ResponseEntity<ResponseDTO<?>> response = movimientoController.mostrarMovimientos(numeroCuenta);

@@ -2,10 +2,10 @@ package com.banco.cuenta_bancaria.mapper;
 
 import java.util.List;
 
+import com.banco.cuenta_bancaria.dto.response.MovimientoResponseDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
-import com.banco.cuenta_bancaria.dto.response.MovimientoResponseDTO;
 import com.banco.cuenta_bancaria.entity.Movimiento;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)

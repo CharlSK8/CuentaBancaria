@@ -16,8 +16,6 @@ import org.springframework.web.server.MissingRequestValueException;
 import com.banco.cuenta_bancaria.dto.response.ResponseDTO;
 import com.banco.cuenta_bancaria.util.Constants;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.security.SignatureException;
 
 @RestControllerAdvice
 public class ControllerAdvisor {
@@ -50,19 +48,4 @@ public class ControllerAdvisor {
                 .message(Constants.MESSAGE_ERROR_BODY)
                 .code(HttpStatus.BAD_REQUEST.value()).response(ex.getMessage()).build());
     }
-
-    @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<ResponseDTO<Object>> handleExpiredJwtException(ExpiredJwtException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseDTO.builder()
-                .message(Constants.MESSAGE_ERROR_BODY)
-                .code(HttpStatus.BAD_REQUEST.value()).response(ex.getMessage()).build());
-    }
-
-    @ExceptionHandler(SignatureException.class)
-    public ResponseEntity<ResponseDTO<Object>> handleSignatureException(SignatureException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseDTO.builder()
-                .message(Constants.MESSAGE_ERROR_BODY)
-                .code(HttpStatus.BAD_REQUEST.value()).response(ex.getMessage()).build());
-    }
-
 }
