@@ -37,10 +37,7 @@ public class CuentaBancaria{
     private BigDecimal saldo;
     private String tipoCuenta;
     private boolean activa;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usuario")
-    private Usuario usuario;
+    private Long numeroIdentificacion;
 
     @OneToMany(mappedBy = "cuentaBancaria", cascade = CascadeType.ALL)
     private List<Movimiento> movimientos;

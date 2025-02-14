@@ -1,5 +1,6 @@
 package com.banco.cuenta_bancaria.service.impl;
 
+import com.banco.cuenta_bancaria.entity.CuentaBancariaEventMessage;
 import com.banco.cuenta_bancaria.service.ICuentaBancariaService;
 import com.banco.cuenta_bancaria.util.CuentaBancariaUtil;
 import com.banco.cuenta_bancaria.util.Result;
@@ -21,34 +22,45 @@ import com.banco.cuenta_bancaria.dto.response.CuentaBancariaCreadaResponse;
 import com.banco.cuenta_bancaria.dto.response.SaldoActualResponseDTO;
 import com.banco.cuenta_bancaria.entity.CuentaBancaria;
 import com.banco.cuenta_bancaria.entity.Movimiento;
-import com.banco.cuenta_bancaria.entity.Usuario;
 import com.banco.cuenta_bancaria.enums.TipoMovimiento;
 import com.banco.cuenta_bancaria.mapper.ICuentaBancariaMapper;
 import com.banco.cuenta_bancaria.repository.ICuentaBancariaRepository;
 import com.banco.cuenta_bancaria.repository.IMovimientoRepository;
-import com.banco.cuenta_bancaria.repository.IUsuarioRepository;
 
 @Service
 @RequiredArgsConstructor
 public class CuentaBancariaServiceImpl implements ICuentaBancariaService {
 
     private final ICuentaBancariaRepository cuentaBancariaRepository;
-    private final IUsuarioRepository usuarioRepository;
     private final IMovimientoRepository movimientoRepository;
     private final ICuentaBancariaMapper cuentaBancariaMapper;
     private final CuentaBancariaUtil cuentaBancariaUtil;
+    private final JmsMessageService jmsMessageService;
 
     @Override
     public Result<CuentaBancariaCreadaResponse, String> crearCuentaBancaria(CrearCuentaRequestDTO request) {
 
 
-        Optional<Usuario> usuario = usuarioRepository.findByNumeroIdetificacionAndActivoTrue(request.getNumeroIdetificacion());
-        if(!usuario.isPresent()) {
-            return Result.failure(List.of("Usuario no encontrado"), HttpStatus.BAD_REQUEST);
-        }
+//        Optional<Usuario> usuario = usuarioRepository.findBynumeroIdentificacionAndActivoTrue(request.getnumeroIdentificacion());
+//        if(!usuario.isPresent()) {
+//            return Result.failure(List.of("Usuario no encontrado"), HttpStatus.BAD_REQUEST);
+//        }
 
-        CuentaBancaria cuentaGuardada = cuentaBancariaRepository.save(cuentaBancariaMapper.toEntity(request, usuario.get(), cuentaBancariaUtil));
-        return Result.success(CuentaBancariaCreadaResponse.builder().numeroCuenta(cuentaGuardada.getNumeroCuenta()).build());
+        /*CuentaBancaria cuentaGuardada = cuentaBancariaRepository.save(cuentaBancariaMapper.toEntity(request, cuentaBancariaUtil));
+        return Result.success(CuentaBancariaCreadaResponse.builder().numeroCuenta(cuentaGuardada.getNumeroCuenta()).build());*/
+
+        CuentaBancaria cuentaGuardada = cuentaBancariaRepository.save(cuentaBancariaMapper.toEntity(request, cuentaBancariaUtil));
+
+        // ActiveMQ
+        CuentaBancariaEventMessage eventMessage = new CuentaBancariaEventMessage("REGISTER",
+                cuentaGuardada.getNumeroCuenta(),
+                cuentaGuardada.getNumeroIdentificacion(),
+                cuentaGuardada.getSaldo(),
+                cuentaGuardada.getTipoCuenta(),
+                cuentaGuardada.isActiva());
+        jmsMessageService.sendEvent("CuentaBancaria", eventMessage); //Enviamos
+
+        return Result.success(new CuentaBancariaCreadaResponse(cuentaGuardada.getNumeroCuenta()));
     }
 
     @Override

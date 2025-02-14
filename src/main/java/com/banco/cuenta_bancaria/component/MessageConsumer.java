@@ -1,0 +1,48 @@
+/*package com.banco.cuenta_bancaria.component;
+
+import jakarta.jms.TextMessage;
+import org.apache.activemq.command.ActiveMQTextMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.jms.annotation.JmsListener;
+import org.springframework.stereotype.Component;
+
+@Component
+public class MessageConsumer {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MessageConsumer.class);
+
+    //Topic for Logout
+    @JmsListener(destination = "auth-topic", containerFactory = "jmsListenerContainerFactory")
+    public void listenAuthTopic(Object eventMessage) {
+        LOGGER.info("📩 App1 Cuenta Bancaria 'Topic' recibió");
+        processMessage(eventMessage, "auth-topic", "AUTH_API");
+    }
+
+    //Queues
+    /*@JmsListener(destination = "auth-queue", containerFactory = "jmsListenerContainerFactory")
+    public void listenAuthQueue(Object eventMessage) {
+        processMessage(eventMessage, "auth-queue", "AUTH_API");
+    }*/
+
+    /*public void processMessage(Object eventMessage, String queueName, String app) {
+        try {
+            String jsonMessage;
+
+            // Extraer el contenido del mensaje si es de tipo ActiveMQTextMessage
+            if (eventMessage instanceof ActiveMQTextMessage) {
+                jsonMessage = ((ActiveMQTextMessage) eventMessage).getText();
+            } else if (eventMessage instanceof TextMessage) {
+                jsonMessage = ((TextMessage) eventMessage).getText();
+            } else {
+                LOGGER.warn("Tipo de mensaje desconocido: {}", eventMessage.getClass().getName());
+                return;
+            }
+            System.out.println("📩 Evento recibido de APP: "+ app +" Cola: "+ queueName + ": " + jsonMessage);
+            LOGGER.info("JSON Message received from {}: Cola:{}: {}", app, queueName, jsonMessage);
+
+        } catch (Exception e) {
+            LOGGER.error("Error processing message from {}: Cola: {}: {}",app, queueName, e.getMessage(), e);
+        }
+    }
+}*/

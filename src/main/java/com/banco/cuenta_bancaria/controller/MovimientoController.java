@@ -32,13 +32,13 @@ public class MovimientoController {
         Result<List<MovimientoResponseDTO>, String> result = movimientoService.mostrarMovimientos(numeroCuenta);
         try{
             return result.isSuccess()
-            ? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.<List<MovimientoResponseDTO>>builder()
+                    ? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.<List<MovimientoResponseDTO>>builder()
                     .message("Se ha mostrado los movimientos correctamente")
                     .code(HttpStatus.OK.value()).response(result.getValue()).build())
-            : ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(ResponseDTO.<String>builder()
-                    .message(String.join("\n", result.getErrors()))
-                    .code(result.getStatusCode().value()).response(null).build());
+                    : ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ResponseDTO.<String>builder()
+                            .message(String.join("\n", result.getErrors()))
+                            .code(result.getStatusCode().value()).response(null).build());
         }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDTO.builder()
                     .message(Constants.MESSAGE_ERROR)
