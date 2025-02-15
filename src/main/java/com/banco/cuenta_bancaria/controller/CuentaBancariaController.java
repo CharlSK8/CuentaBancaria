@@ -1,5 +1,7 @@
 package com.banco.cuenta_bancaria.controller;
 
+import com.banco.cuenta_bancaria.dto.response.CuentaBancariaResponseDTO;
+import com.banco.cuenta_bancaria.entity.CuentaBancaria;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,9 +21,11 @@ import com.banco.cuenta_bancaria.dto.response.SaldoActualResponseDTO;
 import com.banco.cuenta_bancaria.service.ICuentaBancariaService;
 import com.banco.cuenta_bancaria.util.Result;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/cuenta-bancaria")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials = "true")
+// @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials = "true")
 public class CuentaBancariaController {
 
     private ICuentaBancariaService cuentaBancariaService;
@@ -81,5 +85,14 @@ public class CuentaBancariaController {
                         .body(ResponseDTO.<String>builder()
                                 .message(String.join("\n", result.getErrors()))
                                 .code(result.getStatusCode().value()).response(null).build());
+    }
+
+    @GetMapping("/consultar-cuentas/{identificacion}")
+    public ResponseEntity<ResponseDTO<List<CuentaBancariaResponseDTO>>> obtenerCuentasPorIdentificacion(@PathVariable("identificacion") Long identificacion) {
+        List<CuentaBancariaResponseDTO> cuentas = cuentaBancariaService.obtenerCuentasPorIdentificacion(identificacion);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.<List<CuentaBancariaResponseDTO>>builder()
+                .message("Cuentas bancarias obtenidas correctamente.")
+                .code(HttpStatus.OK.value())
+                .response(cuentas).build());
     }
 }

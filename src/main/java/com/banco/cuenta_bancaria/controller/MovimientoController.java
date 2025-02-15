@@ -18,7 +18,7 @@ import com.banco.cuenta_bancaria.util.Result;
 
 @RestController
 @RequestMapping("/api/v1/movimiento")
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 public class MovimientoController {
 
     private IMovimientoService movimientoService;

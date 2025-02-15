@@ -1,5 +1,6 @@
 package com.banco.cuenta_bancaria.mapper;
 
+import com.banco.cuenta_bancaria.dto.response.CuentaBancariaResponseDTO;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -8,6 +9,8 @@ import org.mapstruct.ReportingPolicy;
 import com.banco.cuenta_bancaria.dto.request.CrearCuentaRequestDTO;
 import com.banco.cuenta_bancaria.entity.CuentaBancaria;
 import com.banco.cuenta_bancaria.util.CuentaBancariaUtil;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ICuentaBancariaMapper {
@@ -18,4 +21,5 @@ public interface ICuentaBancariaMapper {
     @Mapping(target = "tipoCuenta", source = "request.tipoCuenta")
     CuentaBancaria toEntity(CrearCuentaRequestDTO request, @Context CuentaBancariaUtil cuentaService);
 
+    List<CuentaBancariaResponseDTO> toListDTO(List<CuentaBancaria> cuentaBancarias);
 }
