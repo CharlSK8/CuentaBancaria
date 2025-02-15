@@ -1,5 +1,6 @@
 package com.banco.cuenta_bancaria.service.impl;
 
+import com.banco.cuenta_bancaria.dto.response.CuentaBancariaResponseDTO;
 import com.banco.cuenta_bancaria.entity.CuentaBancariaEventMessage;
 import com.banco.cuenta_bancaria.service.ICuentaBancariaService;
 import com.banco.cuenta_bancaria.util.CuentaBancariaUtil;
@@ -61,6 +62,12 @@ public class CuentaBancariaServiceImpl implements ICuentaBancariaService {
         jmsMessageService.sendEvent("CuentaBancaria", eventMessage); //Enviamos
 
         return Result.success(new CuentaBancariaCreadaResponse(cuentaGuardada.getNumeroCuenta()));
+    }
+
+    @Override
+    public List<CuentaBancariaResponseDTO> obtenerCuentasPorIdentificacion(Long identificacion) {
+        List<CuentaBancaria> cuentasBancarias = cuentaBancariaRepository.findByNumeroIdentificacion(identificacion);
+        return cuentaBancariaMapper.toListDTO(cuentasBancarias);
     }
 
     @Override
