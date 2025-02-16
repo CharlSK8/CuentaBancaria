@@ -4,9 +4,8 @@ Esta API REST proporciona un sistema completo para la gestión de cuentas bancar
 
 - Administración de cuentas bancarias: Creación, consulta y gestión de cuentas asociadas a usuarios.
 - Control de movimientos: Registro y consulta de transacciones (depósitos y retiros) con validación de saldos.
-- Mensajería asíncrona: Uso de ActiveMQ para recibir y generar colas de mensajes.
 
-El proyecto está construido siguiendo las mejores prácticas de desarrollo, implementando una arquitectura en capas, pruebas unitarias y documentación clara de los endpoints disponibles.
+El proyecto está construido siguiendo las mejores prácticas de desarrollo, implementando una arquitectura en capas, uso de un broker de mensajería, pruebas unitarias y documentación clara de los endpoints disponibles.
 
 ## Dockerizar la Aplicación desde GHCR
 
