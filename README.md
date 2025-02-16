@@ -1,11 +1,10 @@
 # API Cuenta Bancaria
 
-Esta API REST proporciona un sistema completo para la gestión de cuentas bancarias, permitiendo a los usuarios realizar operaciones bancarias básicas de manera segura:
+Esta API REST proporciona un sistema completo para la gestión de cuentas bancarias, permitiendo a los usuarios realizar operaciones bancarias básicas de manera segura.
 
-- Administración de cuentas bancarias: Creación, consulta y gestión de cuentas asociadas a usuarios.
-- Control de movimientos: Registro y consulta de transacciones (depósitos y retiros) con validación de saldos.
+## Descripción General
 
-El proyecto está construido siguiendo las mejores prácticas de desarrollo, implementando una arquitectura en capas, uso de un broker de mensajería, pruebas unitarias y documentación clara de los endpoints disponibles.
+La aplicación proporciona servicios para la creación, consulta, registro y consulta de transacciones (depósitos y retiros) con validación de saldos, y gestión de cuentas bancarias asociadas a usuarios. Para la comunicación asincrónica y el manejo de eventos, se utiliza ActiveMQ como broker de mensajería.
 
 ## Dockerizar la Aplicación desde GHCR
 
@@ -45,16 +44,19 @@ Este documento proporciona los pasos para obtener, ejecutar y administrar un con
 
 ## Tecnologías Utilizadas
 
-- Java 17
-- Spring Boot 3
-- Spring Security + JWT
-- Spring Data JPA
-- H2
-- Lombok
-- MapStruct
-- JUnit 5 + Mockito
-- Gradle
-- ActiveMQ
+- **Java 17**: Lenguaje de programación principal utilizado para desarrollar la aplicación.
+- **Spring Boot**: Framework utilizado para crear aplicaciones basadas en Spring de manera rápida y sencilla.
+- **Lombok**: Herramienta que reduce el código boilerplate mediante anotaciones.
+- **Mockito**: Framework de pruebas utilizado para crear mocks y realizar pruebas unitarias.
+- **JUnit 5**: Framework de pruebas utilizado para escribir y ejecutar pruebas unitarias.
+- **Swagger**: Herramienta utilizada para documentar y probar APIs RESTful.
+- **Git**: Sistema de control de versiones utilizado para el control de versiones del código fuente.
+- **Gradle**: Herramienta de construcción utilizada para compilar y ejecutar la aplicación.
+- **Spring Security + JWT**: Implementación de autenticación y autorización segura mediante tokens JWT.
+- **Spring Data JPA**: Framework para la gestión de persistencia y acceso a bases de datos de manera simplificada.
+- **DBH2**: Base de datos en memoria utilizada para pruebas y desarrollo.
+- **MapStruct**: Herramienta para la conversión eficiente de entidades y DTOs.
+- **ActiveMQ**: Broker de mensajería utilizado para la comunicación asincrónica entre servicios.
 
 ## Endpoints
 
@@ -120,8 +122,22 @@ Como se detalla en el README, podrás acceder a:
 - Gestión de cuentas: `GET /api/v1/cuentas`, `POST /api/v1/cuentas`
 - Gestión de movimientos: `GET /api/v1/movimientos`, `POST /api/v1/movimientos`
 
+### Documentación de Swagger
+
+Swagger es una herramienta poderosa para documentar y probar APIs RESTful. En este proyecto, se ha utilizado Swagger para generar automáticamente la documentación de la API, lo que facilita a los desarrolladores y a otros interesados comprender y probar los endpoints disponibles.
+
+#### Acceso a la Documentación de Swagger
+
+La documentación de Swagger para esta aplicación está disponible en la siguiente URL:
+
+`http://localhost:8080/webjars/swagger-ui/index.html`
+
+Al acceder a esta URL, se puede visualizar una interfaz gráfica que muestra todos los endpoints disponibles, junto con sus métodos HTTP, parámetros requeridos, y posibles respuestas. Además, Swagger permite probar directamente los endpoints desde la interfaz, lo que facilita la verificación y el debugging de la API.
+
 ## Notas Adicionales
 
 - Asegúrate de tener los puertos necesarios disponibles (por defecto 8080).
 - La aplicación utiliza JWT para autenticación, por lo que necesitarás el token para acceder a los endpoints protegidos.
 - Para pruebas, la base de datos H2 se reiniciará cada vez que se reinicie la aplicación.
+
+## Test assessment 2
