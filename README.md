@@ -57,6 +57,8 @@ Este documento proporciona los pasos para obtener, ejecutar y administrar un con
 - **DBH2**: Base de datos en memoria utilizada para pruebas y desarrollo.
 - **MapStruct**: Herramienta para la conversión eficiente de entidades y DTOs.
 - **ActiveMQ**: Broker de mensajería utilizado para la comunicación asincrónica entre servicios.
+- **Podman**: Herramienta para la gestión de contenedores sin necesidad de un demonio en segundo plano, compatible con Docker y enfocada en la seguridad.
+
 
 ## Endpoints
 
