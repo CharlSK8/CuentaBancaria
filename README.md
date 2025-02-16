@@ -1,12 +1,10 @@
 # API Cuenta Bancaria
 
-Esta API REST proporciona un sistema completo para la gestión de cuentas bancarias, permitiendo a los usuarios realizar operaciones bancarias básicas de manera segura. El sistema implementa autenticación mediante JWT y permite:
+Esta API REST proporciona un sistema completo para la gestión de cuentas bancarias, permitiendo a los usuarios realizar operaciones bancarias básicas de manera segura:
 
-- Gestión de usuarios: Registro de nuevos usuarios, actualización de datos y control de estado de cuentas.
-- Autenticación segura: Sistema de login/logout con tokens JWT para proteger los endpoints.
 - Administración de cuentas bancarias: Creación, consulta y gestión de cuentas asociadas a usuarios.
 - Control de movimientos: Registro y consulta de transacciones (depósitos y retiros) con validación de saldos.
-- Persistencia de datos: Almacenamiento seguro de la información en base de datos PostgreSQL.
+- Mensajería asíncrona: Uso de ActiveMQ para recibir y generar colas de mensajes.
 
 El proyecto está construido siguiendo las mejores prácticas de desarrollo, implementando una arquitectura en capas, pruebas unitarias y documentación clara de los endpoints disponibles.
 
@@ -57,19 +55,9 @@ Este documento proporciona los pasos para obtener, ejecutar y administrar un con
 - MapStruct
 - JUnit 5 + Mockito
 - Gradle
+- ActiveMQ
 
 ## Endpoints
-
-### Usuarios
-
-- POST `/api/v1/usuarios/registrar` - Registra un nuevo usuario
-- PUT `/api/v1/usuarios/{id}` - Actualiza información de un usuario existente
-- PUT `/api/v1/usuarios/{id}/inactivar` - Inactiva un usuario
-
-### Autenticación
-
-- POST `/api/v1/auth/login` - Inicia sesión y genera token JWT
-- POST `/api/v1/auth/logout` - Cierra sesión y revoca token
 
 ### Cuentas Bancarias
 
@@ -130,8 +118,6 @@ Una vez iniciada la aplicación:
 
 Como se detalla en el README, podrás acceder a:
 
-- Registro de usuarios: `POST /api/v1/usuarios/registrar`
-- Login: `POST /api/v1/auth/login`
 - Gestión de cuentas: `GET /api/v1/cuentas`, `POST /api/v1/cuentas`
 - Gestión de movimientos: `GET /api/v1/movimientos`, `POST /api/v1/movimientos`
 
