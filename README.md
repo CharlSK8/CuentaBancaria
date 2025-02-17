@@ -20,18 +20,24 @@ Este documento proporciona los pasos para obtener, ejecutar y administrar un con
   podman login ghcr.io -u <USERNAME> -p <PASSWORD> ghcr.io 
   ```
 
-## Descargar y Ejecutar la Imagen
+## Descargar y ejecutar el proyecto en contenedor
+
+- **Crear network**
+
+    ```sh
+    podman network create red-bank
+    ```
 
 - **Descargar la imagen desde GHCR**
 
     ```sh
-    
+    podman pull ghcr.io/charlsk8/cuentas-bancarias:v1.0.0
     ```
 
 - **Correr el contenedor**
 
     ```sh
-    podman run --rm --name jwt -p 8080:8080 -d <IMAGE-NAME>
+    podman run --rm --name cuenta-bancaria --network=red-bank -p 8080:8080 -d ghcr.io/charlsk8/cuentas-bancarias:v1.0.0
     ```
 
 ## Generar imagen
@@ -39,7 +45,13 @@ Este documento proporciona los pasos para obtener, ejecutar y administrar un con
 - **Construir imagen**
 
     ```sh
-    podman build -t <IMAGE-NAME> -f Containerfile . 
+    podman build -t cuenta-bancaria -f Containerfile . 
+    ```
+
+  - **Correr el contenedor**
+
+    ```sh
+    podman run --rm --name cuenta-bancaria --network=red-bank -p 8080:8080 -d cuenta-bancaria
     ```
 
 ## Tecnologías Utilizadas
